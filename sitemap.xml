@@ -3,8 +3,20 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://chemingway.github.io/</loc>
+    <loc>https://chemingway.github.io/blog/</loc>
+    <lastmod>2019-06-22T16:29:10+01:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/</loc>
+    <lastmod>2019-06-22T16:29:10+01:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</loc>
+    <lastmod>2019-06-22T16:29:10+01:00</lastmod>
   </url>
   
   <url>

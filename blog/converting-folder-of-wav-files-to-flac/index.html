@@ -2,7 +2,6 @@
 <html lang="en-GB">
 
 <head>
-	<meta name="generator" content="Hugo 0.55.6" />
 <meta charset="utf-8">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -13,24 +12,24 @@
 <meta property="og:site_name" content="Chris Hemingway" />
 <meta property="og:locale" content="en-GB" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://chemingway.github.io/" />
-<meta property="og:title" content="Chris Hemingway" />
-<meta property="twitter:title" content="Chris Hemingway">
+<meta property="og:url" content="https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/" />
+<meta property="og:title" content="Converting Folder of WAV Files to FLAC" />
+<meta property="twitter:title" content="Converting Folder of WAV Files to FLAC">
 
     <meta property="og:image" content="https://chemingway.github.io/img/banner.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="https://chemingway.github.io/img/banner.png">
 
-<meta property="og:description" content="Example blog">
-<meta property="twitter:description" content="Example blog">
+<meta property="og:description" content="">
+<meta property="twitter:description" content="">
 
 <title>
 
 
-    Chris Hemingway
+     Chris Hemingway - Converting Folder of WAV Files to FLAC 
 
 </title>
-<link rel="canonical" href="https://chemingway.github.io/">
+<link rel="canonical" href="https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/">
 
 
 <style media="screen">
@@ -1048,8 +1047,6 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 
 
 
-  <link href="https://chemingway.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chris Hemingway" />
-
 
 </head>
 
@@ -1057,7 +1054,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         
@@ -1088,50 +1085,116 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
     </div>
 </div>
 
-<div class="main column">
+
+
+
+
+<div class="main post non-narrow zero-top-spacing column">
     <div class="container">
         <div class="content">
-            
-                <div class="markdown">
-                <p>I am a former electronic engineer, now studying a <a href="https://www.ncl.ac.uk/postgraduate/courses/degrees/communications-signal-processing-msc/">Communications and Signal Processing MSc</a> at Newcastle University.</p>
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
 
-<p>This is a personal blog about electronics, machine learning, and whatever else might interest me. Opinions are my own unless otherwise stated.</p>
+    
+    Converting Folder of WAV Files to FLAC
+    
+
+</div>
 
                 </div>
-            
-
-            
-                <div class="posts">
-                
-                
-                    <div class="page-heading">Latest posts</div>
-                    <ul>
+                <div class="meta">
+                    <div class="date" title="Sat Jun 22 2019 16:29:10 BST">Jun 22, 2019</div>
                     
-                        <li class="groupby">Jun, 2019</li>
-                        
-                            <li class="post-item">
-    <span class="meta">Jun 22, 2019</span>
-    
-    <a href="https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/"><span>Converting Folder of WAV Files to FLAC</span></a>
-    
-</li>
-
                         
                     
-                    </ul>
-
                     
-                
+                    <div class="reading-time middot">2 minute read</div>
+                    
+                    <div class="tags">
+                        <ul>
+                          
+                        </ul>
+                    </div>
+                    <div class="tags">
+                        <ul>
+                          
+                          
+                        </ul>
+                    </div>
                 </div>
-            
-
-            <div class="best-posts">
-            
-            
             </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>For audio research, speech and noise corpus&rsquo;s are commonly stored in uncompressed format, generally WAV.
+This results in very large file sizes, for instance the <a href="https://datashare.is.ed.ac.uk/handle/10283/2651">CSTR VCTK Corpus</a> is 10GB.</p>
+
+<p>However, common formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them usless, as they are designed for human speech/music.</p>
+
+<h2 id="conversion">Conversion</h2>
+
+<p>As an exercise, I wrote this script to convert these all into the lossless FLAC format, using <a href="https://ffmpeg.org/">FFmpeg</a> and <a href="https://www.gnu.org/software/parallel/">GNU Parallel</a>.
+Unfortunately (see <a href="#verifying">below</a>), some files refuse to convert losslessly, but I still consider this some good practice in shell programming.</p>
+
+<p>The script creates a parallel set of folders under <code>flac48</code>, as the folder structure is important for working out the meaning of each file in the corpus. It should easily be modifiable, but I don&rsquo;t have much practice in bash shell so cannot give support.</p>
+
+<p>Gist below, GNU parallel request you cite them if you use it (and by extension, this script) in your research:</p>
+
+<script type="application/javascript" src="//gist.github.com/cHemingway/e263e7fbbd5cb7ce609466afe430ecf2.js"></script>
+
+<h2 id="verifying">Verifying</h2>
+
+<p>After conversion, we want to check that when the FLAC audio is decompressed we get back the exact same audio.</p>
+
+<p>Verifying can be done with <a href="https://audiodiff.readthedocs.io/en/latest/">audiodiff</a>, but this only supports python 2, does not show progress, and is single threaded.</p>
+
+<p>After some research, <a href="https://superuser.com/a/532223">this helpful stackoverflow answer</a> shows FFmpeg can encode the audio output directly to an MD5 hash, without needing any intermediate files.</p>
+
+<p>Therefore, I implemented the following script using FFmpeg&rsquo;s MD5 output, and GNU Parallel again for multiprocessing and to show a progress bar. This also uses the excellent tput utility (standard on most linux installations) for text colors.</p>
+
+<p>Unfortunately, on running this script, I found that about 1% of the few hundred audio files differed in MD5 values. Reconverting them manually did not fix the error, so either FFmpeg is subtly failing to losslessly compress, or there is some error (probably less likely) in the MD5 output. Therefore, I will stick to audio for now.</p>
+
+<script type="application/javascript" src="//gist.github.com/cHemingway/a8179174342963473309e29e6422c5fb.js"></script>
+
+
+            </div>
+            
+            
+            <br>
+            <div class="navigation">
+                
+                <div style="width: 100%;"></div>
+                
+            </div>
+            
+            
+
+            
+
+            
+
+            
+            <br>
+            <div class="post bg-white">
+              <script src="https://utteranc.es/client.js"
+                    repo= "cHemingway/chemingway.github.io"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+              </script>
+            </div>
+            
+
         </div>
     </div>
 </div>
+
+
+
 <div class="footer column">
     <div class="container">
 

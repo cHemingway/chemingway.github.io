@@ -6,9 +6,21 @@
     <description>Recent content on Chris Hemingway</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
+    <lastBuildDate>Sat, 22 Jun 2019 16:29:10 +0100</lastBuildDate>
     
 	<atom:link href="https://chemingway.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Converting Folder of WAV Files to FLAC</title>
+      <link>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</link>
+      <pubDate>Sat, 22 Jun 2019 16:29:10 +0100</pubDate>
+      
+      <guid>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</guid>
+      <description>For audio research, speech and noise corpus&amp;rsquo;s are commonly stored in uncompressed format, generally WAV. This results in very large file sizes, for instance the CSTR VCTK Corpus is 10GB.
+However, common formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them usless, as they are designed for human speech/music.
+Conversion As an exercise, I wrote this script to convert these all into the lossless FLAC format, using FFmpeg and GNU Parallel.</description>
+    </item>
     
     <item>
       <title>Home</title>
