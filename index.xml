@@ -2,30 +2,30 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chris Hemingway</title>
-    <link>https://example.com/</link>
+    <link>https://chemingway.github.io/</link>
     <description>Recent content on Chris Hemingway</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
     
-	<atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://chemingway.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Home</title>
-      <link>https://example.com/home/</link>
+      <link>https://chemingway.github.io/home/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/home/</guid>
+      <guid>https://chemingway.github.io/home/</guid>
       <description>I am a former electronic engineer, now studying a Communications and Signal Processing MSc at Newcastle University.
 This is a personal blog about electronics, machine learning, and whatever else might interest me. Opinions are my own unless otherwise stated.</description>
     </item>
     
     <item>
       <title>Site Credits</title>
-      <link>https://example.com/credits/</link>
+      <link>https://chemingway.github.io/credits/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://example.com/credits/</guid>
+      <guid>https://chemingway.github.io/credits/</guid>
       <description> Site:  Built using Hugo Theme is Cocoa Enhanced Hosted on Github Pages  Images:  Site Logo: Data by Flatart from the Noun Project 404 Logo: lost by KEN MURRAY from the Noun Project Favicon: Sound by icon 54 from the Noun Project  </description>
     </item>
     
