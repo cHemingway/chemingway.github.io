@@ -18,7 +18,7 @@
       
       <guid>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</guid>
       <description>For audio research, speech and noise corpus&amp;rsquo;s are commonly stored in uncompressed format, generally WAV. This results in very large file sizes, for instance the CSTR VCTK Corpus is 10GB.
-However, common formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them usless, as they are designed for human speech/music.
+However, common compression formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them useless for comparision against results obtained from the original files.
 Conversion As an exercise, I wrote this script to convert these all into the lossless FLAC format, using FFmpeg and GNU Parallel.</description>
     </item>
     

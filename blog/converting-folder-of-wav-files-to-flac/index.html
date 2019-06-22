@@ -1132,7 +1132,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 <p>For audio research, speech and noise corpus&rsquo;s are commonly stored in uncompressed format, generally WAV.
 This results in very large file sizes, for instance the <a href="https://datashare.is.ed.ac.uk/handle/10283/2651">CSTR VCTK Corpus</a> is 10GB.</p>
 
-<p>However, common formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them usless, as they are designed for human speech/music.</p>
+<p>However, common compression formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them useless for comparision against results obtained from the original files.</p>
 
 <h2 id="conversion">Conversion</h2>
 
@@ -1149,13 +1149,13 @@ Unfortunately (see <a href="#verifying">below</a>), some files refuse to convert
 
 <p>After conversion, we want to check that when the FLAC audio is decompressed we get back the exact same audio.</p>
 
-<p>Verifying can be done with <a href="https://audiodiff.readthedocs.io/en/latest/">audiodiff</a>, but this only supports python 2, does not show progress, and is single threaded.</p>
+<p>Verifying can be done with <a href="https://audiodiff.readthedocs.io/en/latest/">audiodiff</a>, but this only supports python 2, does not show progress, and is single threaded, which results in half an hour of thumb twiddling on my machine.</p>
 
 <p>After some research, <a href="https://superuser.com/a/532223">this helpful stackoverflow answer</a> shows FFmpeg can encode the audio output directly to an MD5 hash, without needing any intermediate files.</p>
 
 <p>Therefore, I implemented the following script using FFmpeg&rsquo;s MD5 output, and GNU Parallel again for multiprocessing and to show a progress bar. This also uses the excellent tput utility (standard on most linux installations) for text colors.</p>
 
-<p>Unfortunately, on running this script, I found that about 1% of the few hundred audio files differed in MD5 values. Reconverting them manually did not fix the error, so either FFmpeg is subtly failing to losslessly compress, or there is some error (probably less likely) in the MD5 output. Therefore, I will stick to audio for now.</p>
+<p>Unfortunately, on running this script, I found that about 1% of the few hundred audio files differed in MD5 values. Reconverting them manually did not fix the error, so either FFmpeg is subtly failing to losslessly compress, or there is some error (probably less likely) in the MD5 output. Therefore, I will stick to WAV for now.</p>
 
 <script type="application/javascript" src="//gist.github.com/cHemingway/a8179174342963473309e29e6422c5fb.js"></script>
 
