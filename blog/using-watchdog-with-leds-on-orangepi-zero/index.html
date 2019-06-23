@@ -1149,13 +1149,15 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 
 <p>So useful and simple are watchdog peripherals, that they can be found built into most processors, even tiny 8-bit devices. The Allwinner H3 processor on our OrangePi <a href="https://forum.armbian.com/topic/2898-how-to-install-enable-and-start-watchdog-in-h3/">contains</a> a watchdog peripheral, <a href="https://www.domoticz.com/wiki/Setting_up_the_raspberry_pi_watchdog">as does</a> the ever popular Raspberry Pi.</p>
 
-<p>Linux&rsquo;s support for watchdogs consists of 2 parts, a kernel driver that creates the <code>\dev\watchdog</code> device, and a userspace daemon <a href="https://linux.die.net/man/8/watchdog">watchdog(8)</a> to repeatedly check the system is behaving and write to the watchdog device causing the countdown timer to reset. If misbehavior is detected, the daemon will trigger a clean shutdown. If the daemon itself fails, the hardware watchdog timer will time out and trigger a reset, which may lead to filesystem corruption, but this is generally a reasonable risk since if the watchdog daemon is dead the system itself is probably not in a recoverable state.</p>
+<p>Linux&rsquo;s support for watchdogs consists of 2 parts, a kernel driver that creates the <code>/dev/watchdog</code> device, and a userspace daemon <a href="https://linux.die.net/man/8/watchdog">watchdog(8)</a> to repeatedly check the system is behaving and write to the watchdog device causing the countdown timer to reset. If misbehavior is detected, the daemon will trigger a clean shutdown. If the daemon itself fails, the hardware watchdog timer will time out and trigger a reset, which may lead to filesystem corruption, but this is generally a reasonable risk since if the watchdog daemon is dead the system itself is probably not in a recoverable state.</p>
 
 <p>Installing the watchdog daemon is easy, just run <code>sudo apt-get install watchdog</code>.</p>
 
-<p>However the daemon is not configured to do very much by default, and so we need to edit the configuration file <code>\etc\watchdog.conf</code> to check for some errors (e.g. loss of network).</p>
+<p>However the daemon is not configured to do very much by default, and so we need to edit the configuration file <code>/etc/watchdog.conf</code> to check for some errors (e.g. loss of network).</p>
 
 <p>I have the following settings which checks network connectivity,  the zerotier service <code>zerotier-one</code> is running, and runs a script to flash an LED. By extension, this checks the filesystem is accessible as well, as the LED script cannot be run if the filesystem has failed.</p>
+
+<h3 id="etc-watchdog-conf">/etc/watchdog.conf</h3>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-conf" data-lang="conf">ping			= 8.8.8.8 # Check google DNS
 ping			= 192.168.0.1 # Check router
 interface		= eth0
@@ -1173,6 +1175,10 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid</code></pre></div>
 <p>A number of triggers are available, such as <code>disk-activity</code>, <code>bluetooth-power</code> etc. Here we are setting the red LED to <code>none</code> so it is directly controlled, and the green led to <code>heartbeat</code> which causes the kernel to flash it at a rate proportional to load, starting at once every few seconds.</p>
 
 <p>The following script is run once at boot using a trivial systemd service. By default, my Armbian distribution uses the green LED as a power LED, so this script also causes it to change to flashing when booted, which is a pleasant side effect.</p>
+
+<h3 id="heartbeat-led-sh">heartbeat_led.sh</h3>
+
+<p>Put under <code>/usr/local/bin/heartbeat_led.sh</code> and make executable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/bin/bash
 </span><span style="color:#ff79c6"></span><span style="color:#6272a4">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
 
@@ -1204,7 +1210,7 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid</code></pre></div>
 
 <h3 id="watchdog-led-sh">watchdog_led.sh</h3>
 
-<p>Save this under <code>/usr/local/bin/watchdog_led.sh</code></p>
+<p>Save this under <code>/usr/local/bin/watchdog_led.sh</code> and make it executable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/bin/bash
 </span><span style="color:#ff79c6"></span><span style="color:#6272a4"># Chris Hemingway 2019, MIT License</span>
 <span style="color:#6272a4"># Flash the LED every time the watchdog runs</span>
@@ -1223,7 +1229,7 @@ sleep <span style="color:#bd93f9">0</span>.5
 <hr />
 
 <ol>
-<li id="fn:1">Run <code>ls /sys/class/leds/</code>. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay.
+<li id="fn:1">Run <code>ls /sys/class/leds/</code> to see what LEDs your board has. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay.
  <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
 <li id="fn:2">Can be up on some systems, but this is abstracted away.
  <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
