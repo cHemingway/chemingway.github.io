@@ -4,14 +4,19 @@
   
   <url>
     <loc>https://chemingway.github.io/blog/</loc>
-    <lastmod>2019-06-22T16:29:10+01:00</lastmod>
+    <lastmod>2019-06-23T18:00:09+01:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://chemingway.github.io/</loc>
-    <lastmod>2019-06-22T16:29:10+01:00</lastmod>
+    <lastmod>2019-06-23T18:00:09+01:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/</loc>
+    <lastmod>2019-06-23T18:00:09+01:00</lastmod>
   </url>
   
   <url>
