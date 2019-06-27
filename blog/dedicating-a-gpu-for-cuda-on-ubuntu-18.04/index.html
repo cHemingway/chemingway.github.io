@@ -1137,9 +1137,9 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 
 <p>Recently, I have been doing some deep learning on Tensorflow and PyTorch by dual booting my PC into Ubuntu 18.04 and training with CUDA drivers.</p>
 
-<p>However, I am using that graphics card to display my desktop as well, and the desktop becomes annoyingly laggy when running training, especially in GPU accelerated applications like Firefox or <a href="https://getpolarized.io/">POLAR</a>.</p>
+<p>However, I am using that graphics card to display my desktop as well, and the desktop becomes annoyingly laggy when running training, especially in GPU accelerated applications like Firefox or <a href="https://getpolarized.io/">POLAR</a>. Changing to using the internal graphics would fix this.</p>
 
-<p>In addition, it would be nice to claim back the graphics RAM used, but my dataset is not that big so this concern is secondary. Finally, I have a <a href="https://github.com/tensorflow/tensorflow/issues/5777">known issue</a> with CUDA no longer working after suspend/resume, which this might fix, or at least make reloading the kernel module easier.</p>
+<p>In addition, it would be nice to claim back the graphics RAM used by X.Org, by dedicating the GPU to CUDA use only <sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>.</p>
 
 <p>Credit to <a href="https://stasosphere.com/">Stas Berkman</a> for <a href="https://askubuntu.com/a/1099963">these instructions on AskUbuntu</a></p>
 
@@ -1151,7 +1151,7 @@ If you are <strong>not using an Intel processor</strong>, you will need differen
 <ol>
 <li>Ensure the internal Intel graphics are enabled in your BIOS. I had to turn it on.</li>
 <li>(Optional) set the default output to &ldquo;internal&rdquo; or similar in your BIOS so the boot screen appears on the right output</li>
-<li>Plug your monitor into the output of the internal graphics. You can have it plugged into both this and the graphics card at once, it is fine <sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>.</li>
+<li>Plug your monitor into the output of the internal graphics. You can have it plugged into both this and the graphics card at once, it is fine <sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup>.</li>
 <li>Check the address of your internal Intel card using <code>lspci</code></li>
 </ol>
 
@@ -1241,8 +1241,10 @@ Thu Jun 27 11:55:10 2019
 <hr />
 
 <ol>
-<li id="fn:1">I use both cables so I can still play games on my windows partition
+<li id="fn:1">I have a <a href="https://github.com/tensorflow/tensorflow/issues/5777">known issue</a> with CUDA no longer working after suspend/resume, which this might fix, or at least make reloading the kernel module easier.
  <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+<li id="fn:2">I use both cables so I can still play games on my windows partition
+ <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
 </ol>
 </div>
 
