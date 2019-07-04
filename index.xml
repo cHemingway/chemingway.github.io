@@ -6,10 +6,21 @@
     <description>Recent content on Chris Hemingway</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Sun, 23 Jun 2019 18:00:09 +0100</lastBuildDate>
+    <lastBuildDate>Thu, 27 Jun 2019 11:54:14 +0100</lastBuildDate>
     
 	<atom:link href="https://chemingway.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Dedicating a GPU for CUDA on Ubuntu 18.04</title>
+      <link>https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/</link>
+      <pubDate>Thu, 27 Jun 2019 11:54:14 +0100</pubDate>
+      
+      <guid>https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/</guid>
+      <description>Recently, I have been doing some deep learning on Tensorflow and PyTorch by dual booting my PC into Ubuntu 18.04 and training with CUDA drivers.
+However, I am using that graphics card to display my desktop as well, and the desktop becomes annoyingly laggy when running training, especially in GPU accelerated applications like Firefox or POLAR. Changing to using the internal graphics would fix this.
+In addition, it would be nice to claim back the graphics RAM used by X.</description>
+    </item>
     
     <item>
       <title>Using watchdog with LEDs on OrangePi Zero</title>

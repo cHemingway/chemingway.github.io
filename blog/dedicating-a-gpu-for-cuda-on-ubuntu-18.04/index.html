@@ -2,7 +2,6 @@
 <html lang="en-GB">
 
 <head>
-	<meta name="generator" content="Hugo 0.55.6" />
 <meta charset="utf-8">
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
@@ -13,24 +12,24 @@
 <meta property="og:site_name" content="Chris Hemingway" />
 <meta property="og:locale" content="en-GB" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://chemingway.github.io/" />
-<meta property="og:title" content="Chris Hemingway" />
-<meta property="twitter:title" content="Chris Hemingway">
+<meta property="og:url" content="https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/" />
+<meta property="og:title" content="Dedicating a GPU for CUDA on Ubuntu 18.04" />
+<meta property="twitter:title" content="Dedicating a GPU for CUDA on Ubuntu 18.04">
 
     <meta property="og:image" content="https://chemingway.github.io/img/logo_full.png">
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="https://chemingway.github.io/img/logo_full.png">
 
-<meta property="og:description" content="Chris Hemingway&#39;s Personal Blog">
-<meta property="twitter:description" content="Chris Hemingway&#39;s Personal Blog">
+<meta property="og:description" content="">
+<meta property="twitter:description" content="">
 
 <title>
 
 
-    Chris Hemingway
+     Chris Hemingway - Dedicating a GPU for CUDA on Ubuntu 18.04 
 
 </title>
-<link rel="canonical" href="https://chemingway.github.io/">
+<link rel="canonical" href="https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/">
 
 
 <style media="screen">
@@ -1048,8 +1047,6 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 
 
 
-  <link href="https://chemingway.github.io/index.xml" rel="alternate" type="application/rss+xml" title="Chris Hemingway" />
-
 
 </head>
 
@@ -1057,7 +1054,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 <body>
 
 
-<div class="header header-home column">
+<div class="header column">
 
     <div class="container">
         
@@ -1088,66 +1085,210 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
     </div>
 </div>
 
-<div class="main column">
+
+
+
+
+<div class="main post non-narrow zero-top-spacing column">
     <div class="container">
         <div class="content">
-            
-                <div class="markdown">
-                <p>I am a former electronic engineer, now studying a <a href="https://www.ncl.ac.uk/postgraduate/courses/degrees/communications-signal-processing-msc/">Communications and Signal Processing MSc</a> at Newcastle University.</p>
+            <div class="front-matter">
+                <div class="title-container">
+                    <div class="page-heading">
 
-<p>This is a personal blog about electronics, machine learning, and whatever else might interest me. Opinions are my own unless otherwise stated.</p>
+    
+    Dedicating a GPU for CUDA on Ubuntu 18.04
+    
+
+</div>
 
                 </div>
-            
-
-            
-                <div class="posts">
-                
-                
-                    <div class="page-heading">Latest posts</div>
-                    <ul>
+                <div class="meta">
+                    <div class="date" title="Thu Jun 27 2019 11:54:14 BST">Jun 27, 2019</div>
                     
-                        <li class="groupby">Jun, 2019</li>
-                        
-                            <li class="post-item">
-    <span class="meta">Jun 27, 2019</span>
-    
-    <a href="https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/"><span>Dedicating a GPU for CUDA on Ubuntu 18.04</span></a>
-    
-</li>
-
-                        
-                            <li class="post-item">
-    <span class="meta">Jun 23, 2019</span>
-    
-    <a href="https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/"><span>Using watchdog with LEDs on OrangePi Zero</span></a>
-    
-</li>
-
-                        
-                            <li class="post-item">
-    <span class="meta">Jun 22, 2019</span>
-    
-    <a href="https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/"><span>Converting Folder of WAV Files to FLAC</span></a>
-    
-</li>
-
                         
                     
-                    </ul>
-
                     
-                
+                    <div class="reading-time middot">3 minute read</div>
+                    
+                    <div class="tags">
+                        <ul>
+                          
+                            <li class="middot"><a href="https://chemingway.github.io/tags/linux">linux</a> </li>
+                          
+                            <li class="middot"><a href="https://chemingway.github.io/tags/cuda">cuda</a> </li>
+                          
+                            <li class="middot"><a href="https://chemingway.github.io/tags/deep-learning">deep learning</a> </li>
+                          
+                        </ul>
+                    </div>
+                    <div class="tags">
+                        <ul>
+                          
+                          
+                        </ul>
+                    </div>
                 </div>
-            
-
-            <div class="best-posts">
-            
-            
             </div>
+            <div class="markdown">
+                
+    
+    
+
+<p>Recently, I have been doing some deep learning on Tensorflow and PyTorch by dual booting my PC into Ubuntu 18.04 and training with CUDA drivers.</p>
+
+<p>However, I am using that graphics card to display my desktop as well, and the desktop becomes annoyingly laggy when running training, especially in GPU accelerated applications like Firefox or <a href="https://getpolarized.io/">POLAR</a>. Changing to using the internal graphics would fix this.</p>
+
+<p>In addition, it would be nice to claim back the graphics RAM used by X.Org, by dedicating the GPU to CUDA use only <sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup>.</p>
+
+<p>Credit to <a href="https://stasosphere.com/">Stas Berkman</a> for <a href="https://askubuntu.com/a/1099963">these instructions on AskUbuntu</a></p>
+
+<p>Note Ubuntu 18.04 uses X.Org as the display server. Other versions of Ubuntu may be using Wayland, which will have different instructions.
+If you are <strong>not using an Intel processor</strong>, you will need different instructions!</p>
+
+<h3 id="steps">Steps</h3>
+
+<ol>
+<li>Ensure the internal Intel graphics are enabled in your BIOS. I had to turn it on.</li>
+<li>(Optional) set the default output to &ldquo;internal&rdquo; or similar in your BIOS so the boot screen appears on the right output</li>
+<li>Plug your monitor into the output of the internal graphics. You can have it plugged into both this and the graphics card at once, it is fine <sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup>.</li>
+<li>Check the address of your internal Intel card using <code>lspci</code></li>
+</ol>
+
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="display:block;width:100%;background-color:#3d3f4a"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain">chris@chris-desktop:~$ lspci
+00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers (rev 07)
+00:01.0 PCI bridge: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor PCIe Controller (x16) (rev 07)
+<span style="display:block;width:100%;background-color:#3d3f4a">00:02.0 VGA compatible controller: Intel Corporation HD Graphics 530 (rev 06)
+</span>00:14.0 USB controller: Intel Corporation 100 Series/C230 Series Chipset Family USB 3.0 xHCI Controller (rev 31)</code></pre></td></tr></table>
+</div>
+</div>
+
+<ol>
+<li><p>Edit/create <code>/etc/X11/xorg.conf</code>, ensuring the PCI number matches, see the <a href="https://askubuntu.com/a/1099963">AskUbuntu post</a> for details.</p>
+
+<pre><code>Section &quot;Device&quot;
+Identifier      &quot;intel&quot;
+Driver          &quot;intel&quot;
+BusId           &quot;PCI:0:2:0&quot;
+EndSection
+
+Section &quot;Screen&quot;
+Identifier      &quot;intel&quot;
+Device          &quot;intel&quot;
+EndSection
+</code></pre></li>
+
+<li><p>Check your existing code works.</p></li>
+</ol>
+
+<p>In my case, the code had set the <a href="https://devblogs.nvidia.com/cuda-pro-tip-control-gpu-visibility-cuda_visible_devices/">CUDA_VISIBLE_DEVICES</a> environmental variable, which hid my GPU from TensorFlow! Removing this got things working again.</p>
+
+<p>Now when running <code>nvidia-smi</code> I get the following output, showing that the GPU is completely free of X.Org or any other process 🙂.</p>
+
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="display:block;width:100%;background-color:#3d3f4a"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain">chris@chris-desktop:~$ nvidia-smi
+Thu Jun 27 11:55:10 2019       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 418.67       Driver Version: 418.67       CUDA Version: 10.1     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|===============================+======================+======================|
+|   0  GeForce GTX 1070    On   | 00000000:01:00.0 Off |                  N/A |
+|  0%   34C    P8     7W / 180W |      1MiB /  8119MiB |      0%      Default |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                       GPU Memory |
+|  GPU       PID   Type   Process name                             Usage      |
+|=============================================================================|
+<span style="display:block;width:100%;background-color:#3d3f4a">|  No running processes found                                                 |
+</span>+-----------------------------------------------------------------------------+</code></pre></td></tr></table>
+</div>
+</div>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:1">I have a <a href="https://github.com/tensorflow/tensorflow/issues/5777">known issue</a> with CUDA no longer working after suspend/resume, which this might fix, or at least make reloading the kernel module easier.
+ <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
+<li id="fn:2">I use both cables so I can still play games on my windows partition
+ <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
+</ol>
+</div>
+
+
+            </div>
+            
+            
+            <br>
+            <div class="navigation">
+                
+                <div>
+                    <img class="icon" src="https://chemingway.github.io/img/back.svg" alt="back" />
+                    <a href="https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/">Using watchdog with LEDs on OrangePi Zero</a>
+                </div>
+                
+                <div style="width: 100%;"></div>
+                
+            </div>
+            
+            
+
+            
+
+            
+
+            
+            <br>
+            <div class="post bg-white">
+              <script src="https://utteranc.es/client.js"
+                    repo= "cHemingway/chemingway.github.io"
+                    issue-term="pathname"
+                    theme="github-light"
+                    crossorigin="anonymous"
+                    async>
+              </script>
+            </div>
+            
+
         </div>
     </div>
 </div>
+
+
+
 <div class="footer column">
     <div class="container">
 
