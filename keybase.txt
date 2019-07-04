@@ -1,0 +1,69 @@
+==================================================================
+https://keybase.io/chemingway
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://chemingway.github.io
+  * I am chemingway (https://keybase.io/chemingway) on keybase.
+  * I have a public key with fingerprint 54B7 26B3 DF30 D6C6 0325  AE07 D50F CC6B A89A 82B0
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101fd5832ed41bc4d9a2d18568c35df00c45a64a849e17fba6c52ddb320c5dc35a20a",
+      "fingerprint": "54b726b3df30d6c60325ae07d50fcc6ba89a82b0",
+      "host": "keybase.io",
+      "key_id": "d50fcc6ba89a82b0",
+      "kid": "0101fd5832ed41bc4d9a2d18568c35df00c45a64a849e17fba6c52ddb320c5dc35a20a",
+      "uid": "9cda4389a11722a396b1ece95be67219",
+      "username": "chemingway"
+    },
+    "service": {
+      "hostname": "chemingway.github.io",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1562279598,
+  "expire_in": 157680000,
+  "prev": "33688abae0c60abffc7a8f6cd38ab24b6ec87e7e29230af67557b9ce87003a2e",
+  "seqno": 7,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.1.0
+Comment: https://keybase.io/crypto
+
+yMIoAnicrVJbSBRRGF6zq90zKKSLjoRRq8yc2Tkzs3YjDKs1SLoS5XJuszuou9vs
+rCZiGlqUWrgPlQiBZnR5MYJSlNJNDKmoiAgqKSx6ECIqhSx76YzVUz12Xg7n5/u+
+//v+8w/MTXalJD35fNk4Nja4M+nh3baY69CKox2VAg7TCsFbKRSzyYuVUBa1/cUm
+FbyCKImSQRVNBox6JEw8VEeASpoCNSIr1BBF4lEQ9CDNozNJNTCCRAGUYhmIRKEc
+g4CIBLdgmKEAsyKWGbK5rOLBKoBYpoYsUkigKAMFMVGlimgQAjHSdKQBLHJiMBx1
+GNwcRlGWY4Z5jT/8k/b+gf/PvmOTcjqhyCPzJpKkAoBkHWKJEaYrmEEVSLoDjDIr
+hEoZR5MgK+Vxy1GFUOUWeL3MJMwZrZPlL0xOwLSDMfwrWcQK22ESLuGIoG1Hol5H
+wa6IOJRyhv2/xfzYDFFO54wyZkXNcEjwShxJbNNRlxQIgKoruuYW2JGIaTG/6SAU
+FWoiP04fVsYlZRlqGsJ89PwPEDYMoiLNgITKvAo8GDKiqUxlQAeyiAyoKoqKdcI0
+VRRlBJjgxDscCgteldtEAS4ZNQMhZMcsJlT1Jw5OdSWluKZPm+Jsmitl1oI/+9ds
+zXT1pr7aYfVcXbNsa/PyYNx96GXL8PYz7qC32ttVZOxpKF8wZ9udsYB7beuHXf6i
+jPO9pZeGOodye9K+D2wmTd9un79+L6t5XXv8eXbHjSsZ+7tW7e342pq+7+SFnJZE
+ut5Q/6JwovlzQ+3N1Y/isO/1yXN0dECbSCzs9ReUJLqqh12fvjw693S6kZc/P9N6
+drzvRO3FgpqVb9t3x1pnt+XlLoan63wb5z1IfV9VtEkbyW900cGa+w11vfVvr+Xl
+di550zHDt78qDRUu3tL92OtL9i2PW6kH+k/NvrE5xV9Z/3hwJI5GsxP17nRf63j6
+ovX93UJW5rumW1/OVioj4z8aP25Y+hPBnkbp
+=XY/p
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/chemingway
+
+==================================================================
+
