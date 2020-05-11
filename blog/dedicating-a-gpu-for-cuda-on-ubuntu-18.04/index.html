@@ -530,6 +530,9 @@ div.main .content .markdown h6 {
   margin-bottom: 1rem;
   letter-spacing: none;
 }
+pre {
+  overflow-x: auto;
+}
 div.main .content .markdown code,
 div.main .content .markdown pre {
   font-family: 'Menlo', monospace;
@@ -958,9 +961,7 @@ margin-left: -4%;
 </noscript>
 
 
-  <style type="text/css" media="screen">
-    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
-  </style>
+  <link type="text/css" rel="stylesheet" href="https://chemingway.github.io/css/syntax.css">
 
 
 
@@ -1155,19 +1156,19 @@ If you are <strong>not using an Intel processor</strong>, you will need differen
 <li>Plug your monitor into the output of the internal graphics. You can have it plugged into both this and the graphics card at once, it is fine <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>.</li>
 <li>Check the address of your internal Intel card using <code>lspci</code></li>
 </ol>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
-</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
-</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="hl"><span class="lnt">4
+</span></span><span class="lnt">5
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain">chris@chris-desktop:~$ lspci
+<td class="lntd">
+<pre class="chroma"><code class="language-plain" data-lang="plain">chris@chris-desktop:~$ lspci
 00:00.0 Host bridge: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor Host Bridge/DRAM Registers (rev 07)
 00:01.0 PCI bridge: Intel Corporation Xeon E3-1200 v5/E3-1500 v5/6th Gen Core Processor PCIe Controller (x16) (rev 07)
-<span style="display:block;width:100%;background-color:#3c3d38">00:02.0 VGA compatible controller: Intel Corporation HD Graphics 530 (rev 06)
+<span class="hl">00:02.0 VGA compatible controller: Intel Corporation HD Graphics 530 (rev 06)
 </span>00:14.0 USB controller: Intel Corporation 100 Series/C230 Series Chipset Family USB 3.0 xHCI Controller (rev 31)</code></pre></td></tr></table>
 </div>
 </div>
@@ -1189,29 +1190,29 @@ EndSection
 </ol>
 <p>In my case, the code had set the <a href="https://devblogs.nvidia.com/cuda-pro-tip-control-gpu-visibility-cuda_visible_devices/">CUDA_VISIBLE_DEVICES</a> environmental variable, which hid my GPU from TensorFlow! Removing this got things working again.</p>
 <p>Now when running <code>nvidia-smi</code> I get the following output, showing that the GPU is completely free of X.Org or any other process 🙂.</p>
-<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="hl"><span class="lnt">17
+</span></span><span class="lnt">18
 </span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain">chris@chris-desktop:~$ nvidia-smi
+<td class="lntd">
+<pre class="chroma"><code class="language-plain" data-lang="plain">chris@chris-desktop:~$ nvidia-smi
 Thu Jun 27 11:55:10 2019       
 +-----------------------------------------------------------------------------+
 | NVIDIA-SMI 418.67       Driver Version: 418.67       CUDA Version: 10.1     |
@@ -1227,7 +1228,7 @@ Thu Jun 27 11:55:10 2019
 | Processes:                                                       GPU Memory |
 |  GPU       PID   Type   Process name                             Usage      |
 |=============================================================================|
-<span style="display:block;width:100%;background-color:#3c3d38">|  No running processes found                                                 |
+<span class="hl">|  No running processes found                                                 |
 </span>+-----------------------------------------------------------------------------+</code></pre></td></tr></table>
 </div>
 </div>
@@ -1356,9 +1357,6 @@ Thu Jun 27 11:55:10 2019
 
 
 
-  <script src="https://chemingway.github.io/js/highlight.min.js" defer></script>
-  
-
 
 
   <script src="https://chemingway.github.io/js/progressively.min.js" defer></script>
@@ -1372,8 +1370,6 @@ Thu Jun 27 11:55:10 2019
 
 <script>
   window.onload = function() {
-    
-      hljs.initHighlighting();
     
     
       progressively.init({delay: 30, throttle: 50});

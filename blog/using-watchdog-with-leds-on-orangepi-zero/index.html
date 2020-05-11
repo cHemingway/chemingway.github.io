@@ -530,6 +530,9 @@ div.main .content .markdown h6 {
   margin-bottom: 1rem;
   letter-spacing: none;
 }
+pre {
+  overflow-x: auto;
+}
 div.main .content .markdown code,
 div.main .content .markdown pre {
   font-family: 'Menlo', monospace;
@@ -958,9 +961,7 @@ margin-left: -4%;
 </noscript>
 
 
-  <style type="text/css" media="screen">
-    .hljs{display:block;background:white;padding:0.5em;color:#333333;overflow-x:auto}.hljs-comment,.hljs-meta{color:#969896}.hljs-string,.hljs-variable,.hljs-template-variable,.hljs-strong,.hljs-emphasis,.hljs-quote{color:#df5000}.hljs-keyword,.hljs-selector-tag,.hljs-type{color:#a71d5d}.hljs-literal,.hljs-symbol,.hljs-bullet,.hljs-attribute{color:#0086b3}.hljs-section,.hljs-name{color:#63a35c}.hljs-tag{color:#333333}.hljs-title,.hljs-attr,.hljs-selector-id,.hljs-selector-class,.hljs-selector-attr,.hljs-selector-pseudo{color:#795da3}.hljs-addition{color:#55a532;background-color:#eaffea}.hljs-deletion{color:#bd2c00;background-color:#ffecec}.hljs-link{text-decoration:underline}
-  </style>
+  <link type="text/css" rel="stylesheet" href="https://chemingway.github.io/css/syntax.css">
 
 
 
@@ -1171,46 +1172,46 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid
 <p>The following script is run once at boot using a trivial systemd service. By default, my Armbian distribution uses the green LED as a power LED, so this script also causes it to change to flashing when booted, which is a pleasant side effect.</p>
 <h3 id="heartbeat_ledsh">heartbeat_led.sh</h3>
 <p>Put under <code>/usr/local/bin/heartbeat_led.sh</code> and make executable.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
-</span><span style="color:#75715e"></span><span style="color:#75715e">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
+</span><span class="cp"></span><span class="c1">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
 
-set -e
-echo heartbeat &gt; /sys/devices/platform/leds/leds/orangepi:green:pwr/trigger
-echo <span style="color:#e6db74">&#34;Enabled heartbeat led&#34;</span>
-echo none &gt; /sys/devices/platform/leds/leds/orangepi:red:status/trigger
-echo <span style="color:#ae81ff">0</span> &gt; /sys/devices/platform/leds/leds/orangepi:red:status/brightness
-echo <span style="color:#e6db74">&#34;Turned off status LED&#34;</span>
+<span class="nb">set</span> -e
+<span class="nb">echo</span> heartbeat &gt; /sys/devices/platform/leds/leds/orangepi:green:pwr/trigger
+<span class="nb">echo</span> <span class="s2">&#34;Enabled heartbeat led&#34;</span>
+<span class="nb">echo</span> none &gt; /sys/devices/platform/leds/leds/orangepi:red:status/trigger
+<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/devices/platform/leds/leds/orangepi:red:status/brightness
+<span class="nb">echo</span> <span class="s2">&#34;Turned off status LED&#34;</span>
 </code></pre></div><h3 id="heartbeat_ledservice">heartbeat_led.service</h3>
 <p>Put under <code>/etc/systemd/system/heartbeat_led.service</code> <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> and run <code>sudo systemctl enable heartbeat_led.service</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-systemd" data-lang="systemd"><span style="color:#66d9ef">[Unit]</span>
-<span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Heartbeat LED enabler</span>
+<div class="highlight"><pre class="chroma"><code class="language-systemd" data-lang="systemd"><span class="k">[Unit]</span>
+<span class="na">Description</span><span class="o">=</span><span class="s">Heartbeat LED enabler</span>
 
-<span style="color:#66d9ef">[Service]</span>
-<span style="color:#a6e22e">Type</span><span style="color:#f92672">=</span><span style="color:#e6db74">simple</span>
-<span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">/bin/bash /usr/local/bin/heartbeat_led.sh</span>
+<span class="k">[Service]</span>
+<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/bin/heartbeat_led.sh</span>
 
-<span style="color:#66d9ef">[Install]</span>
-<span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">multi-user.target</span>
+<span class="k">[Install]</span>
+<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
 </code></pre></div><h2 id="flashing-the-red-led-every-time-the-watchdog-runs">Flashing the red LED every time the watchdog runs</h2>
 <p>The watchdog daemon can run external programs to check the status of the system, either a single program or a collection of them in <code>/etc/watchdog.d</code>. A return code other than <code>0</code> indicates failure, and the watchdog will restart the system.</p>
 <p>We can slightly abuse this functionality to flash an LED every time the watchdog is run, and so get another visual indication the watchdog has actually been started. The script below turns on the LED for half a second, and is run by the daemon by setting <code>test-binary = /usr/local/bin/watchdog_led.sh</code> in <code>watchdog.conf</code>. Therefore, the LED will flash every time the daemon checks the system, which is every 20 seconds in my case.</p>
 <p>Note this program needs the LED trigger to be set to <code>none</code>, which is done by <code>heartbeat_sh.led</code>. Otherwise, the LED trigger may have been set by your distro to something else (e.g. disk activity) and you will get unexpected results.</p>
 <h3 id="watchdog_ledsh">watchdog_led.sh</h3>
 <p>Save this under <code>/usr/local/bin/watchdog_led.sh</code> and make it executable.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
-</span><span style="color:#75715e"></span><span style="color:#75715e"># Chris Hemingway 2019, MIT License</span>
-<span style="color:#75715e"># Flash the LED every time the watchdog runs</span>
-<span style="color:#75715e"># Must be run as root, which should be the case for watchdogd</span>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
+</span><span class="cp"></span><span class="c1"># Chris Hemingway 2019, MIT License</span>
+<span class="c1"># Flash the LED every time the watchdog runs</span>
+<span class="c1"># Must be run as root, which should be the case for watchdogd</span>
 
 
-LED<span style="color:#f92672">=</span>/sys/devices/platform/leds/leds/orangepi:red:status
-set -e <span style="color:#75715e"># Exit on first error</span>
+<span class="nv">LED</span><span class="o">=</span>/sys/devices/platform/leds/leds/orangepi:red:status
+<span class="nb">set</span> -e <span class="c1"># Exit on first error</span>
 
-echo <span style="color:#ae81ff">255</span> &gt; $LED/brightness
+<span class="nb">echo</span> <span class="m">255</span> &gt; <span class="nv">$LED</span>/brightness
 sleep 0.5
-echo <span style="color:#ae81ff">0</span> &gt; $LED/brightness
+<span class="nb">echo</span> <span class="m">0</span> &gt; <span class="nv">$LED</span>/brightness
 
-exit <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Success</span>
+<span class="nb">exit</span> <span class="m">0</span> <span class="c1"># Success</span>
 </code></pre></div><section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
@@ -1339,9 +1340,6 @@ exit <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Success<
 
 
 
-  <script src="https://chemingway.github.io/js/highlight.min.js" defer></script>
-  
-
 
 
   <script src="https://chemingway.github.io/js/progressively.min.js" defer></script>
@@ -1355,8 +1353,6 @@ exit <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Success<
 
 <script>
   window.onload = function() {
-    
-      hljs.initHighlighting();
     
     
       progressively.init({delay: 30, throttle: 50});
