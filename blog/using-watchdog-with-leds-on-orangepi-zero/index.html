@@ -6,6 +6,7 @@
 <meta name="HandheldFriendly" content="True">
 <meta name="MobileOptimized" content="320">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <meta name="description" content="Chris Hemingway&#39;s Personal Blog">
 
 
@@ -384,6 +385,7 @@ div.main .content .front-matter .tags ul li:hover {
 div.main .content .front-matter .tags ul li a {
   color: #666666;
 }
+
 div.main .container.f04 {
   -webkit-justify-content: center;
   -moz-justify-content: center;
@@ -959,7 +961,8 @@ margin-left: -4%;
 
 
   <style type="text/css" media="screen">
-    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;position:absolute;-webkit-transform:translateZ(0);transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px);-webkit-filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);-webkit-filter:blur(20px);-webkit-animation:sharpen .5s both;animation:sharpen .5s both}@-webkit-keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}@keyframes sharpen{from{filter:blur(20px);-webkit-filter:blur(20px)}to{filter:blur(0);-webkit-filter:blur(0)}}
+    .progressive{overflow:hidden;position:relative;background:#efefef}.progressive__img{width:100%;height:100%;transform:translateZ(0)}.progressive--not-loaded{filter:blur(30px)}.progressive--is-loaded{filter:blur(20px);animation:a .5s both}@keyframes a{0%{filter:blur(20px)}to{filter:blur(0)}}
+
   </style>
 
 
@@ -1113,7 +1116,9 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
                     
                     <div class="reading-time middot">5 minute read</div>
                     
-                    <div class="tags">
+                    
+                      <div class="tags">
+                    
                         <ul>
                           
                             <li class="middot"><a href="https://chemingway.github.io/tags/linux">linux</a> </li>
@@ -1135,30 +1140,18 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
             <div class="markdown">
                 
     
-    
-
-<p>I have a small <a href="http://www.orangepi.org/orangepizero/">OrangePi zero</a> on my home network turn on my desktop PC using <a href="https://en.wikipedia.org/wiki/Wake-on-LAN">Wake-on-Lan</a> to SSH in and grab files/run processing when I am out and about. I use <a href="https://www.zerotier.com/">zerotier</a> so I can SSH into both the orangepi and my desktop without needing Dynamic DNS or opening ports in my router.</p>
-
+    <p>I have a small <a href="http://www.orangepi.org/orangepizero/">OrangePi zero</a> on my home network turn on my desktop PC using <a href="https://en.wikipedia.org/wiki/Wake-on-LAN">Wake-on-Lan</a> to SSH in and grab files/run processing when I am out and about. I use <a href="https://www.zerotier.com/">zerotier</a> so I can SSH into both the orangepi and my desktop without needing Dynamic DNS or opening ports in my router.</p>
 <p>However, the SD card used is a bit unreliable, and so occasionally the device will lock up. It would be nice to detect this automatically and reboot when it happens. The board also has some LEDs, which we could use to show the health of the system as well.</p>
-
-<p>I am using <a href="https://www.armbian.com/">Armbian</a>, but these scripts should work with most embedded linux boards, providing you change the LEDs used <sup class="footnote-ref" id="fnref:1"><a href="#fn:1">1</a></sup></p>
-
+<p>I am using <a href="https://www.armbian.com/">Armbian</a>, but these scripts should work with most embedded linux boards, providing you change the LEDs used <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
 <h2 id="setting-up-the-watchdog">Setting up the watchdog</h2>
-
-<p>A watchdog timer is a hardware device which counts down <sup class="footnote-ref" id="fnref:2"><a href="#fn:2">2</a></sup> at a fixed rate unless reset or &ldquo;kicked&rdquo;. When it reaches 0, the system is reset. Watchdog timers are useful because they allow us to restart the system automatically if a process crashes of freezes, by having that process periodically reset the watchdog.</p>
-
+<p>A watchdog timer is a hardware device which counts down <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> at a fixed rate unless reset or &ldquo;kicked&rdquo;. When it reaches 0, the system is reset. Watchdog timers are useful because they allow us to restart the system automatically if a process crashes of freezes, by having that process periodically reset the watchdog.</p>
 <p>So useful and simple are watchdog peripherals, that they can be found built into most processors, even tiny 8-bit devices. The Allwinner H3 processor on our OrangePi <a href="https://forum.armbian.com/topic/2898-how-to-install-enable-and-start-watchdog-in-h3/">contains</a> a watchdog peripheral, <a href="https://www.domoticz.com/wiki/Setting_up_the_raspberry_pi_watchdog">as does</a> the ever popular Raspberry Pi.</p>
-
 <p>Linux&rsquo;s support for watchdogs consists of 2 parts, a kernel driver that creates the <code>/dev/watchdog</code> device, and a userspace daemon <a href="https://linux.die.net/man/8/watchdog">watchdog(8)</a> to repeatedly check the system is behaving and write to the watchdog device causing the countdown timer to reset. If misbehavior is detected, the daemon will trigger a clean shutdown. If the daemon itself fails, the hardware watchdog timer will time out and trigger a reset, which may lead to filesystem corruption, but this is generally a reasonable risk since if the watchdog daemon is dead the system itself is probably not in a recoverable state.</p>
-
 <p>Installing the watchdog daemon is easy, just run <code>sudo apt-get install watchdog</code>.</p>
-
 <p>However the daemon is not configured to do very much by default, and so we need to edit the configuration file <code>/etc/watchdog.conf</code> to check for some errors (e.g. loss of network).</p>
-
 <p>I have the following settings which checks network connectivity,  the zerotier service <code>zerotier-one</code> is running, and runs a script to flash an LED. By extension, this checks the filesystem is accessible as well, as the LED script cannot be run if the filesystem has failed.</p>
-
-<h3 id="etc-watchdog-conf">/etc/watchdog.conf</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-conf" data-lang="conf">ping			= 8.8.8.8 # Check google DNS
+<h3 id="etcwatchdogconf">/etc/watchdog.conf</h3>
+<pre><code class="language-conf" data-lang="conf">ping			= 8.8.8.8 # Check google DNS
 ping			= 192.168.0.1 # Check router
 interface		= eth0
 interval		= 20 # Run tests every 20 seconds
@@ -1167,17 +1160,12 @@ test-timeout            = 10
 realtime		= yes
 priority		= 1
 # Check if zerotier-one is still running by enabling the following line
-pidfile		= /var/lib/zerotier-one/zerotier-one.pid</code></pre></div>
-<h2 id="initializing-leds">Initializing LEDs</h2>
-
+pidfile		= /var/lib/zerotier-one/zerotier-one.pid
+</code></pre><h2 id="initializing-leds">Initializing LEDs</h2>
 <p>The Linux <a href="https://www.kernel.org/doc/Documentation/leds/leds-class.txt">LED subsystem</a> exposes LED&rsquo;s under <code>/sys/class/leds</code>, which can be controlled directly or controlled from an event source in the kernel using a trigger.</p>
-
 <p>A number of triggers are available, such as <code>disk-activity</code>, <code>bluetooth-power</code> etc. Here we are setting the red LED to <code>none</code> so it is directly controlled, and the green led to <code>heartbeat</code> which causes the kernel to flash it at a rate proportional to load, starting at once every few seconds.</p>
-
 <p>The following script is run once at boot using a trivial systemd service. By default, my Armbian distribution uses the green LED as a power LED, so this script also causes it to change to flashing when booted, which is a pleasant side effect.</p>
-
-<h3 id="heartbeat-led-sh">heartbeat_led.sh</h3>
-
+<h3 id="heartbeat_ledsh">heartbeat_led.sh</h3>
 <p>Put under <code>/usr/local/bin/heartbeat_led.sh</code> and make executable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/bin/bash
 </span><span style="color:#ff79c6"></span><span style="color:#6272a4">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
@@ -1187,10 +1175,9 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid</code></pre></div>
 <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;Enabled heartbeat led&#34;</span>
 <span style="color:#8be9fd;font-style:italic">echo</span> none &gt; /sys/devices/platform/leds/leds/orangepi:red:status/trigger
 <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#bd93f9">0</span> &gt; /sys/devices/platform/leds/leds/orangepi:red:status/brightness
-<span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;Turned off status LED&#34;</span></code></pre></div>
-<h3 id="heartbeat-led-service">heartbeat_led.service</h3>
-
-<p>Put under <code>/etc/systemd/system/heartbeat_led.service</code> <sup class="footnote-ref" id="fnref:3"><a href="#fn:3">3</a></sup> and run <code>sudo systemctl enable heartbeat_led.service</code>.</p>
+<span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#f1fa8c">&#34;Turned off status LED&#34;</span>
+</code></pre></div><h3 id="heartbeat_ledservice">heartbeat_led.service</h3>
+<p>Put under <code>/etc/systemd/system/heartbeat_led.service</code> <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> and run <code>sudo systemctl enable heartbeat_led.service</code>.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-systemd" data-lang="systemd"><span style="color:#ff79c6">[Unit]</span>
 <span style="color:#50fa7b">Description</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">Heartbeat LED enabler</span>
 
@@ -1199,17 +1186,12 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid</code></pre></div>
 <span style="color:#50fa7b">ExecStart</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">/bin/bash /usr/local/bin/heartbeat_led.sh</span>
 
 <span style="color:#ff79c6">[Install]</span>
-<span style="color:#50fa7b">WantedBy</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">multi-user.target</span></code></pre></div>
-<h2 id="flashing-the-red-led-every-time-the-watchdog-runs">Flashing the red LED every time the watchdog runs</h2>
-
+<span style="color:#50fa7b">WantedBy</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">multi-user.target</span>
+</code></pre></div><h2 id="flashing-the-red-led-every-time-the-watchdog-runs">Flashing the red LED every time the watchdog runs</h2>
 <p>The watchdog daemon can run external programs to check the status of the system, either a single program or a collection of them in <code>/etc/watchdog.d</code>. A return code other than <code>0</code> indicates failure, and the watchdog will restart the system.</p>
-
 <p>We can slightly abuse this functionality to flash an LED every time the watchdog is run, and so get another visual indication the watchdog has actually been started. The script below turns on the LED for half a second, and is run by the daemon by setting <code>test-binary = /usr/local/bin/watchdog_led.sh</code> in <code>watchdog.conf</code>. Therefore, the LED will flash every time the daemon checks the system, which is every 20 seconds in my case.</p>
-
 <p>Note this program needs the LED trigger to be set to <code>none</code>, which is done by <code>heartbeat_sh.led</code>. Otherwise, the LED trigger may have been set by your distro to something else (e.g. disk activity) and you will get unexpected results.</p>
-
-<h3 id="watchdog-led-sh">watchdog_led.sh</h3>
-
+<h3 id="watchdog_ledsh">watchdog_led.sh</h3>
 <p>Save this under <code>/usr/local/bin/watchdog_led.sh</code> and make it executable.</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/bin/bash
 </span><span style="color:#ff79c6"></span><span style="color:#6272a4"># Chris Hemingway 2019, MIT License</span>
@@ -1221,22 +1203,24 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid</code></pre></div>
 <span style="color:#8be9fd;font-style:italic">set</span> -e <span style="color:#6272a4"># Exit on first error</span>
 
 <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#bd93f9">255</span> &gt; <span style="color:#8be9fd;font-style:italic">$LED</span>/brightness
-sleep <span style="color:#bd93f9">0</span>.5
+sleep 0.5
 <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#bd93f9">0</span> &gt; <span style="color:#8be9fd;font-style:italic">$LED</span>/brightness
 
-<span style="color:#8be9fd;font-style:italic">exit</span> <span style="color:#bd93f9">0</span> <span style="color:#6272a4"># Success</span></code></pre></div><div class="footnotes">
-
-<hr />
-
+<span style="color:#8be9fd;font-style:italic">exit</span> <span style="color:#bd93f9">0</span> <span style="color:#6272a4"># Success</span>
+</code></pre></div><section class="footnotes" role="doc-endnotes">
+<hr>
 <ol>
-<li id="fn:1">Run <code>ls /sys/class/leds/</code> to see what LEDs your board has. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay.
- <a class="footnote-return" href="#fnref:1"><sup>[return]</sup></a></li>
-<li id="fn:2">Can be up on some systems, but this is abstracted away.
- <a class="footnote-return" href="#fnref:2"><sup>[return]</sup></a></li>
-<li id="fn:3">As this is not from a debian package etc, <code>/etc/systemd/system</code> is <a href="https://unix.stackexchange.com/a/458252">the preferred directory</a>.
- <a class="footnote-return" href="#fnref:3"><sup>[return]</sup></a></li>
+<li id="fn:1" role="doc-endnote">
+<p>Run <code>ls /sys/class/leds/</code> to see what LEDs your board has. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:2" role="doc-endnote">
+<p>Can be up on some systems, but this is abstracted away. <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:3" role="doc-endnote">
+<p>As this is not from a debian package etc, <code>/etc/systemd/system</code> is <a href="https://unix.stackexchange.com/a/458252">the preferred directory</a>. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
 </ol>
-</div>
+</section>
 
 
             </div>
@@ -1262,22 +1246,21 @@ sleep <span style="color:#bd93f9">0</span>.5
             
 
             
-
             
-
-            
-            <br>
             <div class="post bg-white">
-              <script src="https://utteranc.es/client.js"
+                <script src="https://utteranc.es/client.js"
                     repo= "cHemingway/chemingway.github.io"
-                    issue-term="pathname"
+                    issue-term="title"
                     theme="github-light"
                     crossorigin="anonymous"
                     async>
-              </script>
+                </script>
             </div>
             
 
+            
+
+            
         </div>
     </div>
 </div>
@@ -1289,11 +1272,13 @@ sleep <span style="color:#bd93f9">0</span>.5
 
         
 
+        
+
         <div class="copyright">
 
         
             
-                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Copyright © 2019 Chris Hemingway</a>
+                <a href="https://creativecommons.org/licenses/by-sa/4.0/">Copyright © 2019-2020 Chris Hemingway</a>
             
         
 
@@ -1311,9 +1296,13 @@ sleep <span style="color:#bd93f9">0</span>.5
         
 
         
+
+        
             <a href="https://github.com/cHemingway" rel=me target="_blank">
                 <img class="icon" src="https://chemingway.github.io/img/github.svg" alt="github" />
             </a>
+        
+
         
 
         

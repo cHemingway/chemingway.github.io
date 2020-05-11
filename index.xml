@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chris Hemingway</title>
@@ -49,8 +49,7 @@ Conversion As an exercise, I wrote this script to convert these all into the los
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://chemingway.github.io/home/</guid>
-      <description>I am a former electronic engineer, now studying a Communications and Signal Processing MSc at Newcastle University.
-This is a personal blog about electronics, machine learning, and whatever else might interest me. Opinions are my own unless otherwise stated.</description>
+      <description>This is a personal blog about electronics, machine learning, and whatever else might interest me. Opinions are my own unless otherwise stated.</description>
     </item>
     
     <item>
@@ -59,7 +58,7 @@ This is a personal blog about electronics, machine learning, and whatever else m
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://chemingway.github.io/credits/</guid>
-      <description> Site:  Built using Hugo Theme is Cocoa Enhanced Hosted on Github Pages  Images:  404 Logo: lost by KEN MURRAY from the Noun Project Favicon: Sound by icon 54 from the Noun Project  </description>
+      <description>Site:  Built using Hugo Theme is Cocoa Enhanced Hosted on Github Pages  Images:  404 Logo: lost by KEN MURRAY from the Noun Project Favicon: Sound by icon 54 from the Noun Project  </description>
     </item>
     
   </channel>
