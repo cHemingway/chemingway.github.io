@@ -6,10 +6,20 @@
     <description>Recent content on Chris Hemingway</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Thu, 27 Jun 2019 11:54:14 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 11 May 2020 12:00:41 +0100</lastBuildDate>
     
 	<atom:link href="https://chemingway.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Nurofen FeverSmart Temperature Monitor Teardown</title>
+      <link>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</link>
+      <pubDate>Mon, 11 May 2020 12:00:41 +0100</pubDate>
+      
+      <guid>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</guid>
+      <description>The Nurofen FeverSmart Temperature Monitor is a wearable real-time temperature sensor for small children and babies, which adheres to the child&amp;rsquo;s skin under the armpit and provides real time measurements of temperature to a companion smartphone, via a base/relay station.
+This was recently on sale at a significant discount (£14.99 vs RRP £49.99) at my local TK Maxx, and it appears Nurofen might have discontinued the product. Being interested in small bluetooth devices, I bought one to take apart.</description>
+    </item>
     
     <item>
       <title>Dedicating a GPU for CUDA on Ubuntu 18.04</title>

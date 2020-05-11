@@ -13,9 +13,9 @@
 <meta property="og:site_name" content="Chris Hemingway" />
 <meta property="og:locale" content="en-GB" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/" />
-<meta property="og:title" content="Using watchdog with LEDs on OrangePi Zero" />
-<meta property="twitter:title" content="Using watchdog with LEDs on OrangePi Zero">
+<meta property="og:url" content="https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/" />
+<meta property="og:title" content="Nurofen FeverSmart Temperature Monitor Teardown" />
+<meta property="twitter:title" content="Nurofen FeverSmart Temperature Monitor Teardown">
 
     <meta property="og:image" content="https://chemingway.github.io/img/logo_full.png">
     <meta property="twitter:card" content="summary_large_image">
@@ -27,10 +27,10 @@
 <title>
 
 
-     Chris Hemingway - Using watchdog with LEDs on OrangePi Zero 
+     Chris Hemingway - Nurofen FeverSmart Temperature Monitor Teardown 
 
 </title>
-<link rel="canonical" href="https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/">
+<link rel="canonical" href="https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/">
 
 
 <style media="screen">
@@ -1104,32 +1104,24 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
                     <div class="page-heading">
 
     
-    Using watchdog with LEDs on OrangePi Zero
+    Nurofen FeverSmart Temperature Monitor Teardown
     
 
 </div>
 
                 </div>
                 <div class="meta">
-                    <div class="date" title="Sun Jun 23 2019 18:00:09 BST">Jun 23, 2019</div>
+                    <div class="date" title="Mon May 11 2020 12:00:41 BST">May 11, 2020</div>
                     
                         
-                        <div class="author middot" title="Chris">Chris</div>
-                        
                     
                     
-                    <div class="reading-time middot">5 minute read</div>
+                    <div class="reading-time middot">9 minute read</div>
                     
                     
                       <div class="tags">
                     
                         <ul>
-                          
-                            <li class="middot"><a href="https://chemingway.github.io/tags/linux">linux</a> </li>
-                          
-                            <li class="middot"><a href="https://chemingway.github.io/tags/programming">programming</a> </li>
-                          
-                            <li class="middot"><a href="https://chemingway.github.io/tags/embedded">embedded</a> </li>
                           
                         </ul>
                     </div>
@@ -1144,84 +1136,93 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
             <div class="markdown">
                 
     
-    <p>I have a small <a href="http://www.orangepi.org/orangepizero/">OrangePi zero</a> on my home network turn on my desktop PC using <a href="https://en.wikipedia.org/wiki/Wake-on-LAN">Wake-on-Lan</a> to SSH in and grab files/run processing when I am out and about. I use <a href="https://www.zerotier.com/">zerotier</a> so I can SSH into both the orangepi and my desktop without needing Dynamic DNS or opening ports in my router.</p>
-<p>However, the SD card used is a bit unreliable, and so occasionally the device will lock up. It would be nice to detect this automatically and reboot when it happens. The board also has some LEDs, which we could use to show the health of the system as well.</p>
-<p>I am using <a href="https://www.armbian.com/">Armbian</a>, but these scripts should work with most embedded linux boards, providing you change the LEDs used <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
-<h2 id="setting-up-the-watchdog">Setting up the watchdog</h2>
-<p>A watchdog timer is a hardware device which counts down <sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup> at a fixed rate unless reset or &ldquo;kicked&rdquo;. When it reaches 0, the system is reset. Watchdog timers are useful because they allow us to restart the system automatically if a process crashes of freezes, by having that process periodically reset the watchdog.</p>
-<p>So useful and simple are watchdog peripherals, that they can be found built into most processors, even tiny 8-bit devices. The Allwinner H3 processor on our OrangePi <a href="https://forum.armbian.com/topic/2898-how-to-install-enable-and-start-watchdog-in-h3/">contains</a> a watchdog peripheral, <a href="https://www.domoticz.com/wiki/Setting_up_the_raspberry_pi_watchdog">as does</a> the ever popular Raspberry Pi.</p>
-<p>Linux&rsquo;s support for watchdogs consists of 2 parts, a kernel driver that creates the <code>/dev/watchdog</code> device, and a userspace daemon <a href="https://linux.die.net/man/8/watchdog">watchdog(8)</a> to repeatedly check the system is behaving and write to the watchdog device causing the countdown timer to reset. If misbehavior is detected, the daemon will trigger a clean shutdown. If the daemon itself fails, the hardware watchdog timer will time out and trigger a reset, which may lead to filesystem corruption, but this is generally a reasonable risk since if the watchdog daemon is dead the system itself is probably not in a recoverable state.</p>
-<p>Installing the watchdog daemon is easy, just run <code>sudo apt-get install watchdog</code>.</p>
-<p>However the daemon is not configured to do very much by default, and so we need to edit the configuration file <code>/etc/watchdog.conf</code> to check for some errors (e.g. loss of network).</p>
-<p>I have the following settings which checks network connectivity,  the zerotier service <code>zerotier-one</code> is running, and runs a script to flash an LED. By extension, this checks the filesystem is accessible as well, as the LED script cannot be run if the filesystem has failed.</p>
-<h3 id="etcwatchdogconf">/etc/watchdog.conf</h3>
-<pre><code class="language-conf" data-lang="conf">ping			= 8.8.8.8 # Check google DNS
-ping			= 192.168.0.1 # Check router
-interface		= eth0
-interval		= 20 # Run tests every 20 seconds
-test-binary		= /usr/local/bin/watchdog_led.sh
-test-timeout            = 10
-realtime		= yes
-priority		= 1
-# Check if zerotier-one is still running by enabling the following line
-pidfile		= /var/lib/zerotier-one/zerotier-one.pid
-</code></pre><h2 id="initializing-leds">Initializing LEDs</h2>
-<p>The Linux <a href="https://www.kernel.org/doc/Documentation/leds/leds-class.txt">LED subsystem</a> exposes LED&rsquo;s under <code>/sys/class/leds</code>, which can be controlled directly or controlled from an event source in the kernel using a trigger.</p>
-<p>A number of triggers are available, such as <code>disk-activity</code>, <code>bluetooth-power</code> etc. Here we are setting the red LED to <code>none</code> so it is directly controlled, and the green led to <code>heartbeat</code> which causes the kernel to flash it at a rate proportional to load, starting at once every few seconds.</p>
-<p>The following script is run once at boot using a trivial systemd service. By default, my Armbian distribution uses the green LED as a power LED, so this script also causes it to change to flashing when booted, which is a pleasant side effect.</p>
-<h3 id="heartbeat_ledsh">heartbeat_led.sh</h3>
-<p>Put under <code>/usr/local/bin/heartbeat_led.sh</code> and make executable.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
-</span><span style="color:#75715e"></span><span style="color:#75715e">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
-
-set -e
-echo heartbeat &gt; /sys/devices/platform/leds/leds/orangepi:green:pwr/trigger
-echo <span style="color:#e6db74">&#34;Enabled heartbeat led&#34;</span>
-echo none &gt; /sys/devices/platform/leds/leds/orangepi:red:status/trigger
-echo <span style="color:#ae81ff">0</span> &gt; /sys/devices/platform/leds/leds/orangepi:red:status/brightness
-echo <span style="color:#e6db74">&#34;Turned off status LED&#34;</span>
-</code></pre></div><h3 id="heartbeat_ledservice">heartbeat_led.service</h3>
-<p>Put under <code>/etc/systemd/system/heartbeat_led.service</code> <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> and run <code>sudo systemctl enable heartbeat_led.service</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-systemd" data-lang="systemd"><span style="color:#66d9ef">[Unit]</span>
-<span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Heartbeat LED enabler</span>
-
-<span style="color:#66d9ef">[Service]</span>
-<span style="color:#a6e22e">Type</span><span style="color:#f92672">=</span><span style="color:#e6db74">simple</span>
-<span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">/bin/bash /usr/local/bin/heartbeat_led.sh</span>
-
-<span style="color:#66d9ef">[Install]</span>
-<span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">multi-user.target</span>
-</code></pre></div><h2 id="flashing-the-red-led-every-time-the-watchdog-runs">Flashing the red LED every time the watchdog runs</h2>
-<p>The watchdog daemon can run external programs to check the status of the system, either a single program or a collection of them in <code>/etc/watchdog.d</code>. A return code other than <code>0</code> indicates failure, and the watchdog will restart the system.</p>
-<p>We can slightly abuse this functionality to flash an LED every time the watchdog is run, and so get another visual indication the watchdog has actually been started. The script below turns on the LED for half a second, and is run by the daemon by setting <code>test-binary = /usr/local/bin/watchdog_led.sh</code> in <code>watchdog.conf</code>. Therefore, the LED will flash every time the daemon checks the system, which is every 20 seconds in my case.</p>
-<p>Note this program needs the LED trigger to be set to <code>none</code>, which is done by <code>heartbeat_sh.led</code>. Otherwise, the LED trigger may have been set by your distro to something else (e.g. disk activity) and you will get unexpected results.</p>
-<h3 id="watchdog_ledsh">watchdog_led.sh</h3>
-<p>Save this under <code>/usr/local/bin/watchdog_led.sh</code> and make it executable.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#75715e">#!/bin/bash
-</span><span style="color:#75715e"></span><span style="color:#75715e"># Chris Hemingway 2019, MIT License</span>
-<span style="color:#75715e"># Flash the LED every time the watchdog runs</span>
-<span style="color:#75715e"># Must be run as root, which should be the case for watchdogd</span>
-
-
-LED<span style="color:#f92672">=</span>/sys/devices/platform/leds/leds/orangepi:red:status
-set -e <span style="color:#75715e"># Exit on first error</span>
-
-echo <span style="color:#ae81ff">255</span> &gt; $LED/brightness
-sleep 0.5
-echo <span style="color:#ae81ff">0</span> &gt; $LED/brightness
-
-exit <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Success</span>
-</code></pre></div><section class="footnotes" role="doc-endnotes">
+    <p>The <a href="https://www.nurofenforchildren.co.uk/products/feversmart-temperature-monitor">Nurofen FeverSmart Temperature Monitor</a> is a wearable real-time temperature sensor for small children and babies, which adheres to the child&rsquo;s skin under the armpit and provides real time measurements of temperature to a companion smartphone, via a base/relay station.</p>
+<p>This was recently on sale at a significant discount (£14.99 vs RRP £49.99) at my local TK Maxx, and it appears Nurofen might have discontinued the product. Being interested in small bluetooth devices, I bought one to take apart.</p>
+<p>The sensor is shown on the left, and the base station (without lid) on the right. Not shown are the transparent stickers used to adhere the sensor on to the child, as I have given those away to someone else who is actually using the device.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/exploded_view.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/exploded_view.jpg" alt="Exploded View"></p></figure>
+<p>The sensor magnetically snaps to the base station, with a single white LED illuminating, changing to flashing when charged. Alignment seems good, I tried a few times and the sensor snaps into place reliably. A clear lid clips on to protect it when charging.</p>
+<p><img src="https://chemingway.github.io/img/nurofen_feversmart/SensorCharging.jpg" alt="Charging"></p>
+<h1 id="base-station">Base Station</h1>
+<p>The base station is responsible for both charging the sensor and &ldquo;relaying&rdquo; bluetooth communications from it. From the documentation:</p>
+<blockquote>
+<p>The Base Station must be kept within <em>1.5m/4.5ft</em> from the Monitor in order for it to boost the signal effectively</p>
+</blockquote>
+<p><img src="https://chemingway.github.io/img/nurofen_feversmart/battery_power.jpg" alt="lid"></p>
+<p>A swinging orange flap covers the back of the device. This is a nice smooth feeling plastic, and swivels round, snapping into place every 90 degrees. It allows for some storage of adhesive pads within the device, and a a more conventional flap covers the 3x AAA batteries within an off the shelf holder.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/back_label.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/back_label.jpg" alt="flap back label"></p></figure>
+<p>The FCC ID is visible on the inside of the lid, along with the pairing key, which is used within the app as an extra security measure. The ID can be checked on <a href="https://fccid.io/2AIJ9-VV-200R">fccio.io</a> to see the official internal photos. The use of a pairing key (presumably uniquely printed per device) instead of the usual &ldquo;hold to pair&rdquo; switch could be due to size limitations, concern over accidental pressing in use, or other usability issues.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/spudgeropenbase.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/spudgeropenbase.jpg" alt="Opening the base"></p></figure>
+<p>The orange back piece is simply pulled off, and then a plastic spudger quickly opens the case. Only four snap fits are present, one in the middle of each side, and no adhesive is used.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/BaseStationOpen.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/BaseStationOpen.jpg" alt="Base Station Open"></p></figure>
+<p>Once open, the single PCB can be seen. The off the shelf battery holder is soldered onto the main PCB by hand, and this holds the battery down and the PCB in. Nothing else holds the PCB and battery holder in apart from these two hand-soldered joints, which results in very fast assembly, with standoffs moulded into the case for alignment.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/exploded_base.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/exploded_base.jpg" alt="Base Station Open"></p></figure>
+<p>These joints are quite clearly done by hand, and flux and solder spatter are spread around them, including a gob of solder stuck in the soft epoxy top of the LED! Clearly, quality control for the electronics is sub-par, as the large handwritten tick mark indicates that some visual inspection was performed.</p>
+<h2 id="base-station-pcb-electronics">Base Station PCB Electronics</h2>
+<p>The base station PCB is a quite simple PCB, with single sided surface mount assembly for lowest assembly cost. Notably however, certain components have <a href="https://www.embedded.com/underfill-revisited-how-a-decades-old-technique-enables-smaller-more-durable-pcbs/">underfill</a> added, which seems unusual as the durability requirements (temperature/vibration) for this product are quite low.</p>
+<p>The silkscreen indicates the design was released on 29th of April 2016, and &ldquo;Vivalink&rdquo; is the name of the company from which Nurofen licensed <a href="http://www.vivalnk.com/product/temperature-sensor">the design</a>.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/RelayPCBFullresHighlighted.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/RelayPCBFullresHighlighted.jpg" alt="Relay PCB"></p></figure>
+<ul>
+<li><span style="color:yellow;background-color:black">Yellow:</span>Battery holder solder points</li>
+<li><span style="color:red">Red: </span>Unknown linear regulator</li>
+<li><span style="color:green">Green: </span>White Status LED</li>
+<li><span style="color:blue">Blue: </span><a href="https://www.ti.com/product/CC2640">TI CC2640</a> Bluetooth Low Energy MCU</li>
+<li><span style="color:purple">Purple: </span>Switched coax connector</li>
+<li><span style="color:pink">Pink: </span> <a href="http://www.antenna-theory.com/antennas/aperture/ifa.php">Inverted-F antenna</a></li>
+<li><span style="color:orange">Orange: </span> Debug header (not fitted)</li>
+</ul>
+<p>Power is provided by the 3xAAA batteries in series at 4.5V, and is stepped down to a lower voltage (likely 3.0V) by the linear regulator U1, a very simple and low power<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup> approach.</p>
+<p>The <a href="https://www.ti.com/product/CC2640">bluetooth MCU</a> U1 is a midrange part, clocking in at $1.69 at 1K quantity. It has both a Cortex-M3 application processor and a dedicated Cortex-M0 for the bluetooth stack. Inductor L1 works with the DC/DC buck regulator to increase efficiency when the radio is active. The MCU is clocked by a high frequency crystal Y2 when it is awake, and the low frequency 32KHz Y1 when it is asleep. Since this is likely a high volume product, the extra certification expense of an IC over a module is probably justified.</p>
+<p>The three test points are surface mount soldered, but rest in plated through holes to give some measure of reinforcement. No ESD protection is visible on the VDD pin, a possible cause of failure, but the &ldquo;I/O&rdquo; pin is possibly protected by D1/R2/R3. It is unknown what this pin is used for, some investigation with a scope is needed.</p>
+<p>The antenna is an Inverted F type<sup id="fnref:2"><a href="#fn:2" class="footnote-ref" role="doc-noteref">2</a></sup>, which offers better performance and resistance to detuning than the more common &ldquo;folded&rdquo; style, at the expense of greater board area. Note that the ground plane and components are kept out of the long axis of the antenna, which would be affected by nearby metal components<sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup>.</p>
+<p>The matching network C5/C15 tunes the antenna for the application. A <a href="https://www.murata.com/en-eu/products/connector/switchconnector">switched coaxial connector</a> (purple) lies within the signal path, and disconnects the antenna when a test pin is connected during test/programming, so that the RF performance can be tested. When <a href="http://colinkarpfinger.com/blog/2010/the-dropouts-guide-to-antenna-design/">tuning</a> the antenna, this connector can be placed in reverse orientation, so the bluetooth IC is disconnected and the antenna connected directly to a network analyser.</p>
+<p>The through hole pads are for a full size 2.54mm pitch debug header, which is used during development. Test points TP5-TP10 would be used for programming during production, using TIs &ldquo;cJTAG&rdquo; interface. This is in contrast to the SWD interface that is more common when using ARM Cortex processors, but the total number of pins are approximately the same. Test point TP11-TP13 are likely for a UART used for both production test and for Direct Test Mode (DTM) in <a href="https://www.bluetooth.com/develop-with-bluetooth/qualification-listing/qualification-process-with-required-testing/">Bluetooth SIG qualification testing</a>.</p>
+<h1 id="sensor">Sensor</h1>
+<p>The sensor is adhered to the skin using disposable adhesive pads, which have a small hole in to allow the single protruding contact to touch the skin directly, so heat flows through the contact pad to an internal temperature sensor. The sensor is rated to IP25, and is welded/glued completely shut.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/BackofSensor.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/BackofSensor.jpg" alt="backside of sensor"></p></figure>
+<p>The key and <a href="https://fccid.io/2AIJ9-VV-200P">FCC ID</a> are printed on the underside. Notably, the <a href="https://fccid.io/2AIJ9-VV-200P/Internal-Photos/Internal-Photos-3076194">internal photos</a> filed with the FCC show a slightly different PCB layout.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/sensor_cut_open.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/sensor_cut_open.jpg" alt="sensor cut open"></p></figure>
+<p>On cutting the sensor open by running a scalpel around all edges, it can be seen that the top half is injection moulded separately before the unit is assembled, and overmoulding is not used. A very thin film/coating<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup> protects the components during this welding/gluing, and can be easily scratched off with a fingernail. It likely also serves to hold the two magnets in place, the two black circles at top right. Overmoulding is unlikely to have been suitable as it would run the risk of damage to the battery.</p>
+<p>On closer inspection of the base station, <a href="https://chemingway.github.io/img/nurofen_feversmart/RingMagnets.jpg">two ring magnets</a> are present around the charging pins, and attract the two magnets within the sensor on the opposite side of the contact pads, maximising the contact force.</p>
+<h2 id="sensor-electronics">Sensor Electronics</h2>
+<p>The sensor electronics are mounted on a rigid-flex PCB, allowing the sensor to provide a more comfortable curved fit. This method of PCB construction is one of the most expensive methods, but a pure flexible PCB would likely put excess stress on the solder joints and lead to failure. To further reinforce the rigid sections, a thin metal sheet is adhered to the underside of the PCB. The ground plane used in the flexible sections is <a href="https://www.bestfpc.com/flex-circuit-design-guide/increasing-flexibility-in-ground-planes.htm">hatched</a> for flexibility.</p>
+<p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/SensorPCBHighlighted.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/SensorPCBHighlighted.jpg" alt="Sensor PCB view"></p></figure>
+<ul>
+<li><span style="color:purple">Purple: </span> Folded Monopole Antenna</li>
+<li><span style="color:blue">Blue: </span><a href="https://www.dialog-semiconductor.com/products/connectivity/bluetooth-low-energy/smartbond-da14580-and-da14583">Dialog DA14580</a> Bluetooth Low Energy MCU</li>
+<li><span style="color:green">Green: </span><a href="https://www.digikey.com/product-detail/en/seiko-instruments/MS920SE-FL27E/728-1058-ND/1889209">Seiko MS920SE-FL27E</a> 3.0V 11mAh  Li-Ion rechargeable battery</li>
+<li><span style="color:red "> Red: </span> Discrete battery charger circuitry</li>
+<li>Yellow: Reverse side of contact pads, magnets are adhered to these.</li>
+<li>White: Unknown temperature sensor</li>
+</ul>
+<p>The DA14580 is a quite cheap bluetooth microcontroller, using a single Cortex-M0 core running at 16MHz for both the application and the bluetooth stack. Rather than reprogrammable flash memory, it has 32kB of one time programmable (OTP) memory for user code, with the BLE stack stored in 84kB of ROM. The extra development costs of using two different manufacturers vs consolidating to one Bluetooth MCU supplier must have been justified by the expected cost savings of using this Dialog part.</p>
+<p>The PCB trace antenna antenna is a small folded Inverted-F antenna. This would be very close to the skin when adhered, with only the thickness of the rubber and sticker beneath the device separating it. The degraded performance from this is likely responsible for the 1.5 meter range to the base station, along with the decreased output power needed for long battery life.</p>
+<p>The temperature sensor is on the opposite side of the PCB from the protruding contact pad, a 6 pin leaded package<sup id="fnref:5"><a href="#fn:5" class="footnote-ref" role="doc-noteref">5</a></sup>. The included instruction manual claims an accuracy of ±0.2°C from 35 to 42C, which is quite high without calibration. Looking at TIs website, only the <a href="https://www.ti.com/product/TMP112">TMP112</a> is a close fit at ±0.5°C (before calibration), and 6 pin package.</p>
+<h1 id="analysis">Analysis</h1>
+<p>The design seems quite robust, especially the sensor part. Other than some bad quality hand soldering, the general quality is good, with proper antenna design, good levels of reinforcement, and &ldquo;name brand&rdquo; parts.</p>
+<p>Charging is fast and easily snaps together, with proper sprung pogo pin being used in the base station, and strong magnets ensuring a high contact force to adequately penetrate the oxide layer. Wearable contacts often get dirty in use, and this design takes appropriate measures to ensure a reliable connection can still be made throughout the devices lifetime.</p>
+<p>The range of the device is quite poor, at 1.5 meters between the base station and sensor. The easiest way to improve this would be to take advantage of the new <a href="https://www.bluetooth.com/blog/exploring-bluetooth-5-going-the-distance/">Coded PHY extensions</a> to the BLE protocol in Bluetooth 5.0, which offer significantly increased range through forward error correction, at the expense of a lower data rate. This would require a redesign to replace both bluetooth microcontrollers with newer devices supporting this feature, e.g. the TI <a href="https://www.ti.com/product/CC2640R2F">CC2640R2F</a>.</p>
+<h2 id="cost">Cost</h2>
+<p>The design is heavily cost optimised, both in part selection and assembly techniques used. The discrete style battery charger is unusual, though likely safe at the very low current and energy capacity of the battery.
+The specified temperature accuracy is quite high, and so it is likely some form of production calibration may be needed, which would increase production cost. This may potentially be the use of the &ldquo;I/O&rdquo; pin, the sensor device may use it to be given calibration coefficients, which it will store in OTP memory.</p>
+<h2 id="security-issues">Security Issues</h2>
+<p>Notably, the DA14580 is <a href="https://www.dialog-semiconductor.com/sweyntooth-bluetooth-low-energy-vulnerability">exposed</a> to one of the <a href="https://asset-group.github.io/disclosures/sweyntooth/">SweynTooth</a> security vulnerabilities, specifically <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-17517">CVE-2019-17517</a>. Although Dialog claim to provide a hotfix, as this MCU is OTP programmed only, it is unclear (without creating an account with dialog) if a fix is available. Possibly, a fix could be loaded into RAM from the base station which is reprogrammable, though the existing firmware would need to allow this, and the RAM in embedded systems is often powered down for energy saving.</p>
+<section class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>Run <code>ls /sys/class/leds/</code> to see what LEDs your board has. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>With a low current enough MCU <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2" role="doc-endnote">
-<p>Can be up on some systems, but this is abstracted away. <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>The measurements match this the design in this <a href="http://www.ti.com/lit/an/swru120d/swru120d.pdf">TI App Note SWRU120D</a>(pdf) <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3" role="doc-endnote">
-<p>As this is not from a debian package etc, <code>/etc/systemd/system</code> is <a href="https://unix.stackexchange.com/a/458252">the preferred directory</a>. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Another benefit of not having any screws within the assembly, as well as lower costs. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:4" role="doc-endnote">
+<p>The feel is similar to set PVA glue film, but less tacky <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+<li id="fn:5" role="doc-endnote">
+<p>The sensor is mounted on a flexible part of the PCB, and a leaded packed would be more robust for this <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -1235,15 +1236,10 @@ exit <span style="color:#ae81ff">0</span> <span style="color:#75715e"># Success<
                 
                 <div>
                     <img class="icon" src="https://chemingway.github.io/img/back.svg" alt="back" />
-                    <a href="https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/">Converting Folder of WAV Files to FLAC</a>
+                    <a href="https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/">Dedicating a GPU for CUDA on Ubuntu 18.04</a>
                 </div>
                 
                 <div style="width: 100%;"></div>
-                
-                <div>
-                    <a href="https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/">Dedicating a GPU for CUDA on Ubuntu 18.04</a>
-                    <img class="icon" src="https://chemingway.github.io/img/next.svg" alt="next" />
-                </div>
                 
             </div>
             
