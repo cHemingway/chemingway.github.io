@@ -1116,7 +1116,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
                         
                     
                     
-                    <div class="reading-time middot">9 minute read</div>
+                    <div class="reading-time middot">10 minute read</div>
                     
                     
                       <div class="tags">
@@ -1156,7 +1156,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 <p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/BaseStationOpen.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/BaseStationOpen.jpg" alt="Base Station Open"></p></figure>
 <p>Once open, the single PCB can be seen. The off the shelf battery holder is soldered onto the main PCB by hand, and this holds the battery down and the PCB in. Nothing else holds the PCB and battery holder in apart from these two hand-soldered joints, which results in very fast assembly, with standoffs moulded into the case for alignment.</p>
 <p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/nurofen_feversmart/exploded_base.jpg" src="https://chemingway.github.io/img/nurofen_feversmart/low/exploded_base.jpg" alt="Base Station Open"></p></figure>
-<p>These joints are quite clearly done by hand, and flux and solder spatter are spread around them, including a gob of solder stuck in the soft epoxy top of the LED! Clearly, quality control for the electronics is sub-par, as the large handwritten tick mark indicates that some visual inspection was performed.</p>
+<p>Unfortunately, the pads do not have any thermal relief, and so hand soldering these is difficult as the large ground plane quickly wicks away heat. The factory has tried to compensate with a higher wattage iron, and so the joint is poor quality without a proper fillet, and flux and solder spatter are spread around, including a gob of solder stuck in the soft epoxy top of the LED! Clearly, quality control for the electronics is sub-par to accept this level of spatter, as the large handwritten tick mark indicates that some visual inspection was performed. It is surprising that the factory would not ask for the PCB design to be changed to add thermal relief, which would be a very simple fix.</p>
 <h2 id="base-station-pcb-electronics">Base Station PCB Electronics</h2>
 <p>The base station PCB is a quite simple PCB, with single sided surface mount assembly for lowest assembly cost. Notably however, certain components have <a href="https://www.embedded.com/underfill-revisited-how-a-decades-old-technique-enables-smaller-more-durable-pcbs/">underfill</a> added, which seems unusual as the durability requirements (temperature/vibration) for this product are quite low.</p>
 <p>The silkscreen indicates the design was released on 29th of April 2016, and &ldquo;Vivalink&rdquo; is the name of the company from which Nurofen licensed <a href="http://www.vivalnk.com/product/temperature-sensor">the design</a>.</p>
@@ -1210,7 +1210,7 @@ The specified temperature accuracy is quite high, and so it is likely some form 
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p>With a low current enough MCU <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>Linear regulators generally have lower quiescent current than switching for the same cost <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2" role="doc-endnote">
 <p>The measurements match this the design in this <a href="http://www.ti.com/lit/an/swru120d/swru120d.pdf">TI App Note SWRU120D</a>(pdf) <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
@@ -1222,7 +1222,7 @@ The specified temperature accuracy is quite high, and so it is likely some form 
 <p>The feel is similar to set PVA glue film, but less tacky <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:5" role="doc-endnote">
-<p>The sensor is mounted on a flexible part of the PCB, and a leaded packed would be more robust for this <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p>The sensor is mounted on a flexible part of the PCB, and a leaded package would be more robust for this <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
