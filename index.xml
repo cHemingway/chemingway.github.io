@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Chris Hemingway</title>
@@ -6,52 +6,9 @@
     <description>Recent content on Chris Hemingway</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-GB</language>
-    <lastBuildDate>Mon, 11 May 2020 12:00:41 +0100</lastBuildDate>
     
 	<atom:link href="https://chemingway.github.io/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Nurofen FeverSmart Temperature Monitor Teardown</title>
-      <link>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</link>
-      <pubDate>Mon, 11 May 2020 12:00:41 +0100</pubDate>
-      
-      <guid>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</guid>
-      <description>The Nurofen FeverSmart Temperature Monitor is a wearable real-time temperature sensor for small children and babies, which adheres to the child&amp;rsquo;s skin under the armpit and provides real time measurements of temperature to a companion smartphone, via a base/relay station.
-This was recently on sale at a significant discount (£14.99 vs RRP £49.99) at my local TK Maxx, and it appears Nurofen might have discontinued the product. Being interested in small bluetooth devices, I bought one to take apart.</description>
-    </item>
-    
-    <item>
-      <title>Dedicating a GPU for CUDA on Ubuntu 18.04</title>
-      <link>https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/</link>
-      <pubDate>Thu, 27 Jun 2019 11:54:14 +0100</pubDate>
-      
-      <guid>https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/</guid>
-      <description>Recently, I have been doing some deep learning on Tensorflow and PyTorch by dual booting my PC into Ubuntu 18.04 and training with CUDA drivers.
-However, I am using that graphics card to display my desktop as well, and the desktop becomes annoyingly laggy when running training, especially in GPU accelerated applications like Firefox or POLAR. Changing to using the internal graphics would fix this.
-In addition, it would be nice to claim back the graphics RAM used by X.</description>
-    </item>
-    
-    <item>
-      <title>Using watchdog with LEDs on OrangePi Zero</title>
-      <link>https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/</link>
-      <pubDate>Sun, 23 Jun 2019 18:00:09 +0100</pubDate>
-      
-      <guid>https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/</guid>
-      <description>I have a small OrangePi zero on my home network turn on my desktop PC using Wake-on-Lan to SSH in and grab files/run processing when I am out and about. I use zerotier so I can SSH into both the orangepi and my desktop without needing Dynamic DNS or opening ports in my router.
-However, the SD card used is a bit unreliable, and so occasionally the device will lock up.</description>
-    </item>
-    
-    <item>
-      <title>Converting Folder of WAV Files to FLAC</title>
-      <link>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</link>
-      <pubDate>Sat, 22 Jun 2019 16:29:10 +0100</pubDate>
-      
-      <guid>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</guid>
-      <description>For audio research, speech and noise corpus&amp;rsquo;s are commonly stored in uncompressed format, generally WAV. This results in very large file sizes, for instance the CSTR VCTK Corpus is 10GB.
-However, common compression formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them useless for comparision against results obtained from the original files.
-Conversion As an exercise, I wrote this script to convert these all into the lossless FLAC format, using FFmpeg and GNU Parallel.</description>
-    </item>
     
     <item>
       <title>Home</title>
@@ -68,7 +25,7 @@ Conversion As an exercise, I wrote this script to convert these all into the los
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://chemingway.github.io/credits/</guid>
-      <description>Site:  Built using Hugo Theme is Cocoa Enhanced Hosted on Github Pages  Images:  404 Logo: lost by KEN MURRAY from the Noun Project Favicon: Sound by icon 54 from the Noun Project  </description>
+      <description> Site:  Built using Hugo Theme is Cocoa Enhanced Hosted on Github Pages  Images:  404 Logo: lost by KEN MURRAY from the Noun Project Favicon: Sound by icon 54 from the Noun Project  </description>
     </item>
     
   </channel>
