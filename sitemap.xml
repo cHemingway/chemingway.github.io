@@ -1,9 +1,35 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://chemingway.github.io/blog/</loc>
+    <lastmod>2020-05-11T12:00:41+01:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://chemingway.github.io/</loc>
+    <lastmod>2020-05-11T12:00:41+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</loc>
+    <lastmod>2020-05-11T12:00:41+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/blog/dedicating-a-gpu-for-cuda-on-ubuntu-18.04/</loc>
+    <lastmod>2019-06-27T11:54:14+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/</loc>
+    <lastmod>2019-06-23T18:00:09+01:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</loc>
+    <lastmod>2019-06-22T16:29:10+01:00</lastmod>
   </url>
   
   <url>
