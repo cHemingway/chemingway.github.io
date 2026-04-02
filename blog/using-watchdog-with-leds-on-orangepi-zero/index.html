@@ -1156,7 +1156,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 <p>However the daemon is not configured to do very much by default, and so we need to edit the configuration file <code>/etc/watchdog.conf</code> to check for some errors (e.g. loss of network).</p>
 <p>I have the following settings which checks network connectivity,  the zerotier service <code>zerotier-one</code> is running, and runs a script to flash an LED. By extension, this checks the filesystem is accessible as well, as the LED script cannot be run if the filesystem has failed.</p>
 <h3 id="etcwatchdogconf">/etc/watchdog.conf</h3>
-<pre><code class="language-conf" data-lang="conf">ping			= 8.8.8.8 # Check google DNS
+<pre tabindex="0"><code class="language-conf" data-lang="conf">ping			= 8.8.8.8 # Check google DNS
 ping			= 192.168.0.1 # Check router
 interface		= eth0
 interval		= 20 # Run tests every 20 seconds
@@ -1172,60 +1172,60 @@ pidfile		= /var/lib/zerotier-one/zerotier-one.pid
 <p>The following script is run once at boot using a trivial systemd service. By default, my Armbian distribution uses the green LED as a power LED, so this script also causes it to change to flashing when booted, which is a pleasant side effect.</p>
 <h3 id="heartbeat_ledsh">heartbeat_led.sh</h3>
 <p>Put under <code>/usr/local/bin/heartbeat_led.sh</code> and make executable.</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span><span class="c1">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
-
-<span class="nb">set</span> -e
-<span class="nb">echo</span> heartbeat &gt; /sys/devices/platform/leds/leds/orangepi:green:pwr/trigger
-<span class="nb">echo</span> <span class="s2">&#34;Enabled heartbeat led&#34;</span>
-<span class="nb">echo</span> none &gt; /sys/devices/platform/leds/leds/orangepi:red:status/trigger
-<span class="nb">echo</span> <span class="m">0</span> &gt; /sys/devices/platform/leds/leds/orangepi:red:status/brightness
-<span class="nb">echo</span> <span class="s2">&#34;Turned off status LED&#34;</span>
-</code></pre></div><h3 id="heartbeat_ledservice">heartbeat_led.service</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="c1">#Enable the heartbeat LED on boot, and set status LED to on demand</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -e
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> heartbeat &gt; /sys/devices/platform/leds/leds/orangepi:green:pwr/trigger
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Enabled heartbeat led&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> none &gt; /sys/devices/platform/leds/leds/orangepi:red:status/trigger
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">0</span> &gt; /sys/devices/platform/leds/leds/orangepi:red:status/brightness
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;Turned off status LED&#34;</span>
+</span></span></code></pre></div><h3 id="heartbeat_ledservice">heartbeat_led.service</h3>
 <p>Put under <code>/etc/systemd/system/heartbeat_led.service</code> <sup id="fnref:3"><a href="#fn:3" class="footnote-ref" role="doc-noteref">3</a></sup> and run <code>sudo systemctl enable heartbeat_led.service</code>.</p>
-<div class="highlight"><pre class="chroma"><code class="language-systemd" data-lang="systemd"><span class="k">[Unit]</span>
-<span class="na">Description</span><span class="o">=</span><span class="s">Heartbeat LED enabler</span>
-
-<span class="k">[Service]</span>
-<span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
-<span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/bin/heartbeat_led.sh</span>
-
-<span class="k">[Install]</span>
-<span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
-</code></pre></div><h2 id="flashing-the-red-led-every-time-the-watchdog-runs">Flashing the red LED every time the watchdog runs</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-systemd" data-lang="systemd"><span class="line"><span class="cl"><span class="k">[Unit]</span>
+</span></span><span class="line"><span class="cl"><span class="na">Description</span><span class="o">=</span><span class="s">Heartbeat LED enabler</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[Service]</span>
+</span></span><span class="line"><span class="cl"><span class="na">Type</span><span class="o">=</span><span class="s">simple</span>
+</span></span><span class="line"><span class="cl"><span class="na">ExecStart</span><span class="o">=</span><span class="s">/bin/bash /usr/local/bin/heartbeat_led.sh</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">[Install]</span>
+</span></span><span class="line"><span class="cl"><span class="na">WantedBy</span><span class="o">=</span><span class="s">multi-user.target</span>
+</span></span></code></pre></div><h2 id="flashing-the-red-led-every-time-the-watchdog-runs">Flashing the red LED every time the watchdog runs</h2>
 <p>The watchdog daemon can run external programs to check the status of the system, either a single program or a collection of them in <code>/etc/watchdog.d</code>. A return code other than <code>0</code> indicates failure, and the watchdog will restart the system.</p>
 <p>We can slightly abuse this functionality to flash an LED every time the watchdog is run, and so get another visual indication the watchdog has actually been started. The script below turns on the LED for half a second, and is run by the daemon by setting <code>test-binary = /usr/local/bin/watchdog_led.sh</code> in <code>watchdog.conf</code>. Therefore, the LED will flash every time the daemon checks the system, which is every 20 seconds in my case.</p>
 <p>Note this program needs the LED trigger to be set to <code>none</code>, which is done by <code>heartbeat_sh.led</code>. Otherwise, the LED trigger may have been set by your distro to something else (e.g. disk activity) and you will get unexpected results.</p>
 <h3 id="watchdog_ledsh">watchdog_led.sh</h3>
 <p>Save this under <code>/usr/local/bin/watchdog_led.sh</code> and make it executable.</p>
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span><span class="c1"># Chris Hemingway 2019, MIT License</span>
-<span class="c1"># Flash the LED every time the watchdog runs</span>
-<span class="c1"># Must be run as root, which should be the case for watchdogd</span>
-
-
-<span class="nv">LED</span><span class="o">=</span>/sys/devices/platform/leds/leds/orangepi:red:status
-<span class="nb">set</span> -e <span class="c1"># Exit on first error</span>
-
-<span class="nb">echo</span> <span class="m">255</span> &gt; <span class="nv">$LED</span>/brightness
-sleep 0.5
-<span class="nb">echo</span> <span class="m">0</span> &gt; <span class="nv">$LED</span>/brightness
-
-<span class="nb">exit</span> <span class="m">0</span> <span class="c1"># Success</span>
-</code></pre></div><section class="footnotes" role="doc-endnotes">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="c1"># Chris Hemingway 2019, MIT License</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Flash the LED every time the watchdog runs</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Must be run as root, which should be the case for watchdogd</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">LED</span><span class="o">=</span>/sys/devices/platform/leds/leds/orangepi:red:status
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> -e <span class="c1"># Exit on first error</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">255</span> &gt; <span class="nv">$LED</span>/brightness
+</span></span><span class="line"><span class="cl">sleep 0.5
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">0</span> &gt; <span class="nv">$LED</span>/brightness
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">exit</span> <span class="m">0</span> <span class="c1"># Success</span>
+</span></span></code></pre></div><div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p>Run <code>ls /sys/class/leds/</code> to see what LEDs your board has. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay. <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p>Run <code>ls /sys/class/leds/</code> to see what LEDs your board has. If you don&rsquo;t see any, your kernel might not have any configured, and you will need to change your kernel config or add a device tree overlay.&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
-<p>Can be up on some systems, but this is abstracted away. <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:2">
+<p>Can be up on some systems, but this is abstracted away.&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
-<p>As this is not from a debian package etc, <code>/etc/systemd/system</code> is <a href="https://unix.stackexchange.com/a/458252">the preferred directory</a>. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:3">
+<p>As this is not from a debian package etc, <code>/etc/systemd/system</code> is <a href="https://unix.stackexchange.com/a/458252">the preferred directory</a>.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 
             </div>

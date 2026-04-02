@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Audio on Chris Hemingway</title>
+    <link>https://chemingway.github.io/tags/audio/</link>
+    <description>Recent content in Audio on Chris Hemingway</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Sat, 22 Jun 2019 16:29:10 +0100</lastBuildDate>
+    <atom:link href="https://chemingway.github.io/tags/audio/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Converting Folder of WAV Files to FLAC</title>
+      <link>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</link>
+      <pubDate>Sat, 22 Jun 2019 16:29:10 +0100</pubDate>
+      <guid>https://chemingway.github.io/blog/converting-folder-of-wav-files-to-flac/</guid>
+      <description>&lt;p&gt;For audio research, speech and noise corpus&amp;rsquo;s are commonly stored in uncompressed format, generally WAV.&#xA;This results in very large file sizes, for instance the &lt;a href=&#34;https://datashare.is.ed.ac.uk/handle/10283/2651&#34;&gt;CSTR VCTK Corpus&lt;/a&gt; is 10GB.&lt;/p&gt;&#xA;&lt;p&gt;However, common compression formats like MP3 or Ogg Vorbis would cause distortion of noise signals rendering them useless for comparision against results obtained from the original files.&lt;/p&gt;&#xA;&lt;h2 id=&#34;conversion&#34;&gt;Conversion&lt;/h2&gt;&#xA;&lt;p&gt;As an exercise, I wrote this script to convert these all into the lossless FLAC format, using &lt;a href=&#34;https://ffmpeg.org/&#34;&gt;FFmpeg&lt;/a&gt; and &lt;a href=&#34;https://www.gnu.org/software/parallel/&#34;&gt;GNU Parallel&lt;/a&gt;.&#xA;Unfortunately (see &lt;a href=&#34;#verifying&#34;&gt;below&lt;/a&gt;), some files refuse to convert losslessly, but I still consider this some good practice in shell programming.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Embedded on Chris Hemingway</title>
+    <link>https://chemingway.github.io/tags/embedded/</link>
+    <description>Recent content in Embedded on Chris Hemingway</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <lastBuildDate>Sun, 23 Jun 2019 18:00:09 +0100</lastBuildDate>
+    <atom:link href="https://chemingway.github.io/tags/embedded/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Using watchdog with LEDs on OrangePi Zero</title>
+      <link>https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/</link>
+      <pubDate>Sun, 23 Jun 2019 18:00:09 +0100</pubDate>
+      <guid>https://chemingway.github.io/blog/using-watchdog-with-leds-on-orangepi-zero/</guid>
+      <description>&lt;p&gt;I have a small &lt;a href=&#34;http://www.orangepi.org/orangepizero/&#34;&gt;OrangePi zero&lt;/a&gt; on my home network turn on my desktop PC using &lt;a href=&#34;https://en.wikipedia.org/wiki/Wake-on-LAN&#34;&gt;Wake-on-Lan&lt;/a&gt; to SSH in and grab files/run processing when I am out and about. I use &lt;a href=&#34;https://www.zerotier.com/&#34;&gt;zerotier&lt;/a&gt; so I can SSH into both the orangepi and my desktop without needing Dynamic DNS or opening ports in my router.&lt;/p&gt;&#xA;&lt;p&gt;However, the SD card used is a bit unreliable, and so occasionally the device will lock up. It would be nice to detect this automatically and reboot when it happens. The board also has some LEDs, which we could use to show the health of the system as well.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

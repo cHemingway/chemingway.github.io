@@ -1207,26 +1207,26 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 The specified temperature accuracy is quite high, and so it is likely some form of production calibration may be needed, which would increase production cost. This may potentially be the use of the &ldquo;I/O&rdquo; pin, the sensor device may use it to be given calibration coefficients, which it will store in OTP memory.</p>
 <h2 id="security-issues">Security Issues</h2>
 <p>Notably, the DA14580 is <a href="https://www.dialog-semiconductor.com/sweyntooth-bluetooth-low-energy-vulnerability">exposed</a> to one of the <a href="https://asset-group.github.io/disclosures/sweyntooth/">SweynTooth</a> security vulnerabilities, specifically <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2019-17517">CVE-2019-17517</a>. Although Dialog claim to provide a hotfix, as this MCU is OTP programmed only, it is unclear (without creating an account with dialog) if a fix is available. Possibly, a fix could be loaded into RAM from the base station which is reprogrammable, though the existing firmware would need to allow this, and the RAM in embedded systems is often powered down for energy saving.</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p>Linear regulators generally have lower quiescent current than switching for the same cost <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p>Linear regulators generally have lower quiescent current than switching for the same cost&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:2" role="doc-endnote">
-<p>The measurements match this the design in this <a href="http://www.ti.com/lit/an/swru120d/swru120d.pdf">TI App Note SWRU120D</a>(pdf) <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:2">
+<p>The measurements match this the design in this <a href="http://www.ti.com/lit/an/swru120d/swru120d.pdf">TI App Note SWRU120D</a>(pdf)&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:3" role="doc-endnote">
-<p>Another benefit of not having any screws within the assembly, as well as lower costs. <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:3">
+<p>Another benefit of not having any screws within the assembly, as well as lower costs.&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:4" role="doc-endnote">
-<p>The feel is similar to set PVA glue film, but less tacky <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:4">
+<p>The feel is similar to set PVA glue film, but less tacky&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
-<li id="fn:5" role="doc-endnote">
-<p>The sensor is mounted on a flexible part of the PCB, and a leaded package would be more robust for this <a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:5">
+<p>The sensor is mounted on a flexible part of the PCB, and a leaded package would be more robust for this&#160;<a href="#fnref:5" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
 
             </div>
