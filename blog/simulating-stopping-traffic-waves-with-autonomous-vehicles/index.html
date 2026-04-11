@@ -1117,7 +1117,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
                         
                     
                     
-                    <div class="reading-time middot">3 minute read</div>
+                    <div class="reading-time middot">5 minute read</div>
                     
                     
                       <div class="tags">
@@ -1148,7 +1148,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
 <p>Almost all of this (apart from this blog post) was vibe coded, the base prompt is Anthropic&rsquo;s <a href="https://github.com/anthropics/skills/blob/main/skills/web-artifacts-builder/SKILL.md">web-artifact-builder</a> skill.</p>
 <h2 id="trying-it-yourself">Trying it yourself</h2>
 <p>Source code is <a href="https://github.com/cHemingway/traffic-wave-sim">on github</a>, and you can play with the simulation interactively below to see if it makes a difference, or press &ldquo;AV Impact Analysis&rdquo; to get a full sweep of relative jam impact vs AV fraction.</p>
-<p>Hint: Try a medium-high density (~40 cars/km), and no AVs vs 5% AVs, with the PI controller. With no AVs, the standing wave ends up being fairly continuous, while with 5% AVs it gets dissipated. You can see the AVs start moving back before the wave hits them as well.</p>
+<p><em>Hint: Try a medium-high density (~40 cars/km), and no AVs vs 5% AVs, with the PI controller. With no AVs, the standing wave ends up being fairly continuous, while with 5% AVs it gets dissipated. You can see the AVs start moving back before the wave hits them as well.</em></p>
 <style>
 #root {
   width: 100vw;
@@ -1185,6 +1185,18 @@ Error generating stack: `+e.message+`
 <p>My learnings were (expectedly) the importance of good tests, having an oracle (so many bugs were found after forcing the model to check a simulation vs stern&rsquo;s results) and the unreasonable seeming complexity of web development, I can&rsquo;t believe how many build steps and config files I&rsquo;ve ended up with. If I did it again I would probably push for a simpler base prompt to reduce the codebase complexity, e.g. <a href="https://simonwillison.net/guides/agentic-engineering-patterns/prompts/#artifacts">Simon Williamson</a> just uses vanilla html/js/css. It also got a bit tricky merging the &ldquo;style&rdquo; after only deciding later to put this into my blog, it&rsquo;s not as elegantly cascading as the dream of CSS suggests, especially if you want to have dark/light mode switching.</p>
 <p>Frequently switching between agents and command line tools a lot also made it important to write more context down, e.g. I have lost the code to some of the graphs, as the agent just ran it directly rather than saved it to disk first. The short (270K tok) context window of Z.AI&rsquo;s GLM-5.1 hasn&rsquo;t helped with this.</p>
 <p>This was also quite expensive to run for a &ldquo;I wonder if&rdquo; type experiment, I reckon about $20 worth split between copilot usage and openrouter credits, and at least 3-4 hours of prompting (while watching The Pitt). Better model choice and judgement on how much guidance to give and when could have probably helped with this, as would have sitting down and understanding the literature myself first.</p>
+<h2 id="how-does-this-compare-to-the-real-world-literature">How does this compare to the real world literature?</h2>
+<p>This simulation does roughly match (according to the automated tests) the results of the 2018 Stern Experiment, but matching more complex field experiments looks hard, as the experiments were both less conclusive and more complex in implementation.</p>
+<p>The <a href="https://arxiv.org/pdf/2402.17043">MegaVanderTest</a> was carried out in 2022 with 100 AVs on the 4 mile long <a href="https://i24motion.org/">I-24 motion testbed</a>, with <a href="https://bair.berkeley.edu/blog/2025/03/25/rl-av-smoothing/#100-av-field-test-deploying-rl-at-scale">preliminary results</a> a bit inconclusive as to if it helped overall.</p>
+<blockquote>
+<p>Overall, although getting precise measurements from a large amount of camera video data is complicated, we observe a trend of 15 to 20% of energy savings around our controlled cars.</p>
+</blockquote>
+<p>and a <a href="https://www.annualreviews.org/docserver/fulltext/control/8/1/annurev-control-030123-015145.pdf?expires=1775907197&amp;amp;id=id&amp;amp;accname=guest&amp;amp;checksum=76DC9512722D2ADFFF95479D1D5F6082">good overview summary of the entire field</a> from Feb 2025 states full results are yet to be published.</p>
+<blockquote>
+<p>The plot also confirms the expectation that the control vehicles were at too low a penetration rate to completely remove traffic waves, but upcoming publications will reveal whether the CAVs reduced the magnitudes of the waves.</p>
+</blockquote>
+<p>The data from MegaVanderTest is <a href="https://i24motion.org/data">freely available</a>, but very complex due to the huge number of vehicles, and &ldquo;matching&rdquo; a relatively small result that even the original study authors can&rsquo;t clearly see is likely to be quite difficult difficult.</p>
+<p>In addition, more complex field experiments use much more complex algorithms to avoid problems like &ldquo;resonance&rdquo; between AVs, so any simulation that tried to replicate these real world results would also need to implement these. The controllers here in this simulation are just very basic &ldquo;leave a gap&rdquo; from <a href="http://trafficwaves.org/">trafficwaves.org</a> and the PI control vs average speed of Stern (but limited to seeing a fixed number of vehicles ahead, instead of omniscience).</p>
 
 
             </div>
