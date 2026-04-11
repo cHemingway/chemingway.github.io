@@ -1117,7 +1117,7 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
                         
                     
                     
-                    <div class="reading-time middot">2 minute read</div>
+                    <div class="reading-time middot">3 minute read</div>
                     
                     
                       <div class="tags">
@@ -1143,16 +1143,22 @@ div.main .content .markdown pre, div.main .content .markdown pre code {
             <div class="markdown">
                 
     
-    <p>Can autonomous vehicles help reduce traffic jams by stopping traffic waves?</p>
+    <p><em>Can autonomous vehicles help reduce traffic jams by stopping traffic waves?</em></p>
 <p>Inspired by a thought from a coworker who had heard of this before, and to practice more LLM development, I ran some simulations based on Stern et al&rsquo;s 2018 paper: <a href="https://lab-work.github.io/download/stern2018dissipation.pdf">Dissipation of stop-and-go waves via control of autonomous vehicles: Field experiments</a>. I attempted to replicate the results in simulation and extend to 3 lanes of traffic with drivers changing lanes.</p>
 <p>Almost all of this (apart from this blog post) was vibe coded, the base prompt is Anthropic&rsquo;s <a href="https://github.com/anthropics/skills/blob/main/skills/web-artifacts-builder/SKILL.md">web-artifact-builder</a> skill.</p>
+<h2 id="learnings-about-traffic">Learnings about Traffic</h2>
+<p><strong>Warning:</strong> I haven&rsquo;t hand checked the maths or code, and overall I&rsquo;m not that happy with trusting these results, I don&rsquo;t think I understand them well or have good intuition enough to catch bugs other than asking the LLM &ldquo;are you sure&rdquo; a lot. It feels quite likely some different tuning parameters or more realistic driver behavior (e.g. slowing when adjacent lanes slow) would give a completely different result. The 3 lane simulation in particular is suspect as there is no ground truth to check it against.</p>
 <p>A main finding was that a single lane experiment (as done by Stern) is the ideal scenario, the gap added by the AVs stops the red wave of stalled traffic.</p>
 <p><figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/traffic-wave-sim/st_0av.svg" src="https://chemingway.github.io/img/traffic-wave-sim/low/st_0av.svg" alt="Without AVs"></figure>
 <figure class="progressive"><img class="progressive__img progressive--not-loaded" data-progressive="https://chemingway.github.io/img/traffic-wave-sim/st_5av.svg" src="https://chemingway.github.io/img/traffic-wave-sim/low/st_5av.svg" alt="With AVs"></p></figure>
-<p>When you have multiple lanes you have merging into the &ldquo;gap&rdquo; an AV leaves to stop the wave, which mitigates the effect. Any real world implementation is also going to be limited by the lack of V2V comms preventing autonomous vehicles seeing that far ahead. I haven&rsquo;t hand checked the maths or code, so there&rsquo;s almost certainly bugs, and the effects are not massive so its not impossible some different tuning parameters or more realistic driver behavior (e.g. slowing when adjacent lanes slow) would give a different result.
-There&rsquo;s also a more detailed (and AI generated) <a href="https://github.com/cHemingway/traffic-wave-sim/blob/main/REPORT.md">report</a> that gives a fair bit more detail, some nice graphs, and citations.</p>
+<p>When you have multiple lanes you have merging into the &ldquo;gap&rdquo; an AV leaves to stop the wave, which reduces the effectiveness (86% vs 30% on standard speed deviation at high density traffic, and 60 cars/km).</p>
+<p>Any real world implementation is also going to be limited by the lack of V2V comms preventing autonomous vehicles seeing that far ahead.</p>
+<p>There&rsquo;s a more detailed (and AI generated) <a href="https://github.com/cHemingway/traffic-wave-sim/blob/main/REPORT.md">report</a> that gives a fair bit more detail, some nice graphs, and citations, but I certainly wouldn&rsquo;t trust that to be correct either!</p>
+<h2 id="learnings-about-ai--artifacts">Learnings about AI / Artifacts</h2>
 <p>My learnings were (expectedly) the importance of good tests, having an oracle (so many bugs were found after forcing the model to check a simulation vs stern&rsquo;s results) and the unreasonable seeming complexity of web development, I can&rsquo;t believe how many build steps and config files I&rsquo;ve ended up with. If I did it again I would probably push for a simpler base prompt to reduce the codebase complexity, e.g. <a href="https://simonwillison.net/guides/agentic-engineering-patterns/prompts/#artifacts">Simon Williamson</a> just uses vanilla html/js/css. It also got a bit tricky merging the &ldquo;style&rdquo; after only deciding later to put this into my blog, it&rsquo;s not as elegantly cascading as the dream of CSS suggests, especially if you want to have dark/light mode switching.</p>
-<p>This was also quite expensive to run for a &ldquo;I wonder if&rdquo; type experiment, I reckon about $20 worth split between copilot usage and openrouter credits. Better model choice and judgement on how much guidance to give and when could have probably helped with this.</p>
+<p>Frequently switching between agents and command line tools a lot also made it important to write more context down, e.g. I have lost the code to some of the graphs, as the agent just ran it directly rather than saved it to disk first. The short (270K tok) context window of Z.AI&rsquo;s GLM-5.1 hasn&rsquo;t helped with this.</p>
+<p>This was also quite expensive to run for a &ldquo;I wonder if&rdquo; type experiment, I reckon about $20 worth split between copilot usage and openrouter credits, and at least 3-4 hours of prompting (while watching The Pitt). Better model choice and judgement on how much guidance to give and when could have probably helped with this, as would have sitting down and understanding the literature myself first.</p>
+<h2 id="trying-it-yourself">Trying it yourself</h2>
 <p>Source code is <a href="https://github.com/cHemingway/traffic-wave-sim">on github</a>, and you can play with the simulation interactively below, or press &ldquo;AV Impact Analysis&rdquo; to get a full sweep of relative jam impact vs AV fraction.</p>
 <style>
 #root {
