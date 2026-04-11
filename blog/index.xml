@@ -6,8 +6,15 @@
     <description>Recent content in Blog on Chris Hemingway</description>
     <generator>Hugo</generator>
     <language>en-GB</language>
-    <lastBuildDate>Mon, 11 May 2020 12:00:41 +0100</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2026 09:07:34 +0000</lastBuildDate>
     <atom:link href="https://chemingway.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Simulating Stopping Traffic Waves with Autonomous Vehicles</title>
+      <link>https://chemingway.github.io/blog/simulating-stopping-traffic-waves-with-autonomous-vehicles/</link>
+      <pubDate>Sat, 11 Apr 2026 09:07:34 +0000</pubDate>
+      <guid>https://chemingway.github.io/blog/simulating-stopping-traffic-waves-with-autonomous-vehicles/</guid>
+      <description>&lt;p&gt;Can autonomous vehicles help reduce traffic jams by stopping traffic waves?&lt;/p&gt;&#xA;&lt;p&gt;Inspired by a thought from a coworker who had heard of this before, and to practice more LLM development, I ran some simulations based on Stern et al&amp;rsquo;s 2018 paper: &lt;a href=&#34;https://lab-work.github.io/download/stern2018dissipation.pdf&#34;&gt;Dissipation of stop-and-go waves via control of autonomous vehicles: Field experiments&lt;/a&gt;. I attempted to replicate the results in simulation and extend to 3 lanes of traffic with drivers changing lanes.&lt;/p&gt;</description>
+    </item>
     <item>
       <title>Nurofen FeverSmart Temperature Monitor Teardown</title>
       <link>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</link>

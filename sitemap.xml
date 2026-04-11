@@ -2,11 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://chemingway.github.io/tags/ai/</loc>
+    <lastmod>2026-04-11T09:07:34+00:00</lastmod>
+  </url><url>
     <loc>https://chemingway.github.io/blog/</loc>
-    <lastmod>2020-05-11T12:00:41+01:00</lastmod>
+    <lastmod>2026-04-11T09:07:34+00:00</lastmod>
   </url><url>
     <loc>https://chemingway.github.io/</loc>
-    <lastmod>2020-05-11T12:00:41+01:00</lastmod>
+    <lastmod>2026-04-11T09:07:34+00:00</lastmod>
+  </url><url>
+    <loc>https://chemingway.github.io/tags/interactive/</loc>
+    <lastmod>2026-04-11T09:07:34+00:00</lastmod>
+  </url><url>
+    <loc>https://chemingway.github.io/tags/llm/</loc>
+    <lastmod>2026-04-11T09:07:34+00:00</lastmod>
+  </url><url>
+    <loc>https://chemingway.github.io/blog/simulating-stopping-traffic-waves-with-autonomous-vehicles/</loc>
+    <lastmod>2026-04-11T09:07:34+00:00</lastmod>
   </url><url>
     <loc>https://chemingway.github.io/blog/nurofen-feversmart-temperature-monitor-teardown/</loc>
     <lastmod>2020-05-11T12:00:41+01:00</lastmod>
